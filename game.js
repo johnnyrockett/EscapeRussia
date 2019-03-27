@@ -11,13 +11,12 @@ document.body.appendChild(renderer.view);
 var stage = new PIXI.Container();
 
 // create a texture from an image path
-var texture = PIXI.Texture.fromImage('images/playerWGun.png');
-var carrotTex = PIXI.Texture.fromImage('images/bullet.png');
-var grass = PIXI.Texture.fromImage('images/grass.png');
+var texture = PIXI.Texture.from('images/playerWGun.png');
+var carrotTex = PIXI.Texture.from('images/bullet.png');
+var grass = PIXI.Texture.from('images/grass.png');
 
 // create a new Sprite using the texture
 var player = new PIXI.Sprite(texture);
-
 // center the sprite's anchor point
 player.anchor.x = 0.5;
 player.anchor.y = 0.5;
@@ -26,8 +25,18 @@ player.anchor.y = 0.5;
 player.position.x = window.innerWidth/2;
 player.position.y = window.innerHeight/2;
 
-var tilingSprite = new PIXI.extras.TilingSprite(grass, window.innerWidth, window.innerHeight);
+var tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
 stage.addChild(tilingSprite);
+
+var structures = [];
+structures.push(new Structure(
+    [new Vector(200, 100), new Vector(300, 100), new Vector(300, 200), new Vector(200, 200)],
+    [[0, 1], [1, 2], [2, 3], [3, 0]]));
+for (var structure of structures) {
+    var graphic = structure.toGraphic();
+    graphic.position = player.position;
+    stage.addChild(graphic);
+}
 
 // var background = new PIXI.Graphics();
 // background.beginFill(0x229922);
@@ -107,39 +116,47 @@ function updateView(object)
 
     var vec = new Vector(viewDistance, 0);
 
-    vecs.push(vec.rotate(object.rotation + FOV / 2));
-    vecs.push(vec.rotate(object.rotation - FOV / 2));
+    var left = vec.rotate(object.rotation - FOV / 2)
+    var right = vec.rotate(object.rotation + FOV / 2)
+
+    vecs.push(left);
+    vecs.push(right);
+
+    for (var structure of structures) {
+        // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
+        for (var point of structure.coords) {
+            if (left.cross(point) > 0 && right.cross(point) < 0) {
+                vecs.push(point.clone());
+            }
+        }
+    }
+
+    // If it isn't behind any walls
+    for (var vec of vecs) {
+        for (var structure of structures) {
+            vec = structure.getIntersection(vec);
+        }
+    }
+
+
+    // After I find all of my vecs, or points, I should sort them based on their angle
+    vecs = vecs.sort(function (a, b) {
+        return a.cross(b) < 0;
+    });
 
     // left.print(path);
     // right.print(path);
 
     path = [];
 
-    var offset = new Vector(object.position);
-
     for (var vec of vecs) {
+        // console.log(vec);
         vec.print(path);
     }
 
-    console.log(path);
-
-
-    // var triangleWidth = 100,
-    //     triangleHeight = triangleWidth,
-    //     triangleHalfway = triangleWidth/2;
-
-    // draw triangle
-    // var path = [20, 50, 100, 150, 0, 0];
     object.triangle.drawPolygon(path);
     // console.log(path);
     object.triangle.endFill();
-
-    // object.triangle.moveTo(triangleWidth, 0);
-    // object.triangle.lineTo(triangleHalfway, triangleHeight);
-    // object.triangle.lineTo(0, 0);
-    // object.triangle.lineTo(triangleHalfway, 0);
-    // object.triangle.endFill();
-    // object.triangle.rotation = player.rotation;
 }
 
 function outside(position) {
