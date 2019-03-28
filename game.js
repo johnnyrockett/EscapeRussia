@@ -11,37 +11,63 @@ document.body.appendChild(renderer.view);
 var stage = new PIXI.Container();
 
 // create a texture from an image path
-var texture = PIXI.Texture.from('images/playerWGun.png');
-var carrotTex = PIXI.Texture.from('images/bullet.png');
-var grass = PIXI.Texture.from('images/grass.png');
+PIXI.loader
+.add('player', "images/playerWGun.png")
+.add('bullet', "images/bullet.png")
+.add('grass', "images/grass.png")
+.load(setup)
 
-// create a new Sprite using the texture
-var player = new PIXI.Sprite(texture);
-// center the sprite's anchor point
-player.anchor.x = 0.5;
-player.anchor.y = 0.5;
-
-// move the sprite to the center of the screen
-player.position.x = window.innerWidth/2;
-player.position.y = window.innerHeight/2;
-
-var tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
-stage.addChild(tilingSprite);
-
+var carrotTex;
+var player;
+var tilingSprite;
 var structures = [];
-structures.push(new Structure(
-    [new Vector(200, 100), new Vector(300, 100), new Vector(300, 200), new Vector(200, 200)],
-    [[0, 1], [1, 2], [2, 3], [3, 0]],
-    [[0, -1], [1, 0], [0, 1], [-1, 0]]));
-for (var structure of structures) {
-    var graphic = structure.toGraphic();
-    graphic.position = player.position;
-    stage.addChild(graphic);
+
+function setup() {
+    // var texture = PIXI.Texture.from('images/playerWGun.png');
+    carrotTex = PIXI.loader.resources.bullet.texture;
+    var grass = PIXI.loader.resources.grass.texture;
+
+    // create a new Sprite using the texture
+    player = new PIXI.Sprite(PIXI.loader.resources.player.texture);
+    // center the sprite's anchor point
+    player.anchor.x = 0.5;
+    player.anchor.y = 0.5;
+
+    // move the sprite to the center of the screen
+    player.position.x = window.innerWidth/2;
+    player.position.y = window.innerHeight/2;
+
+    tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
+    stage.addChild(tilingSprite);
+
+    structures.push(new Structure(
+        [new Vector(200, 100), new Vector(300, 100), new Vector(300, 200), new Vector(200, 200)],
+        [[0, 1], [1, 2], [2, 3], [3, 0]],
+        [[0, -1], [1, 0], [0, 1], [-1, 0]]));
+
+
+
+    // //Make a horrizontal coridoor
+    // structures.push(new Structure( [new Vector(200, 50), new Vector(50, 50), new Vector(200, 90), new Vector(50, 90)],
+    //                                 [[0,1], [2,3] ],
+    //                                 [[0, -1], [0,1]]));
+
+    // //Make a vertical corridoor
+    // structures.push(new Structure( [new Vector(100, 100), new Vector(75, 100), new Vector(100, 400), new Vector(75, 400)],
+    //                                 [[0,2], [1,3] ],
+    //                                 [[-1, 0], [1,0]]));
+
+    for (var structure of structures) {
+        var graphic = structure.toGraphic();
+        graphic.position = player.position;
+        stage.addChild(graphic);
+    }
+
+    stage.addChild(player);
+
+    stage.interactive = true;
+    animate();
 }
-
-stage.addChild(player);
-
-stage.interactive = true;
 
 stage.on("mousedown", function(e){
   shoot(player.rotation, {
@@ -194,8 +220,6 @@ function evaluateControls() {
         tilingSprite.tilePosition.y += movementSpeed;
 }
 
-// start animating
-animate();
 function animate() {
 
   evaluateControls();
