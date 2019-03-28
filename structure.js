@@ -20,17 +20,27 @@ function Structure(coords, walls, normals) {
 
 Structure.prototype = {
 	toGraphic: function() {
-        var graphic = new PIXI.Graphics();
-		graphic.beginFill(0xFFFFFF, 1.0);
-        graphic.lineStyle(0, 0xFFFFFF, 1.0);
+        this.graphic = new PIXI.Graphics();
+        return this.graphic;
+    },
+    animate: function() {
+        this.graphic.clear();
+        this.graphic.beginFill(0xFFFFFF, 1.0);
+        this.graphic.lineStyle(0, 0xFFFFFF, 1.0);
         var path = [];
         for (var point of this.coords) {
             point.print(path);
         }
 
-        graphic.drawPolygon(path);
-        graphic.endFill();
-        return graphic;
+        this.graphic.drawPolygon(path);
+        this.graphic.endFill();
+    },
+    addOffset: function(x, y) {
+        if (x != 0 || y != 0) {
+            for (var coord of this.coords) {
+                coord.add(new Vector(x, y));
+            }
+        }
     },
     getIntersection: function (point) {
         for (var wall of this.walls) {

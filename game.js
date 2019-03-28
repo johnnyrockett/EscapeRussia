@@ -210,14 +210,22 @@ function outside(position) {
 var movementSpeed = 3;
 
 function evaluateControls() {
+    var offsetX = 0;
+    var offsetY = 0;
     if (keys["d"])
-        tilingSprite.tilePosition.x -= movementSpeed;
+        offsetX -= movementSpeed;
     if (keys["s"])
-        tilingSprite.tilePosition.y -= movementSpeed;
+        offsetY -= movementSpeed;
     if (keys["a"])
-        tilingSprite.tilePosition.x += movementSpeed;
+        offsetX += movementSpeed;
     if (keys["w"])
-        tilingSprite.tilePosition.y += movementSpeed;
+        offsetY += movementSpeed;
+
+    tilingSprite.tilePosition.x += offsetX;
+    tilingSprite.tilePosition.y += offsetY;
+    for (var structure of structures) {
+        structure.addOffset(offsetX, offsetY);
+    }
 }
 
 function animate() {
@@ -234,6 +242,11 @@ function animate() {
     if (outside(bullets[b].position)) {
         stage.removeChild(bullets[b]);
     }
+  }
+
+  // update structures
+  for (var structure of structures) {
+      structure.animate();
   }
   // render the container
   renderer.render(stage);
