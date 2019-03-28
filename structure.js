@@ -4,9 +4,18 @@
 * This probably means that I'll need the equation of the wall.
 */
 
-function Structure(coords, walls) {
+function Structure(coords, walls, normals) {
     this.coords = coords;
     this.walls = walls;
+    this.normals = [];
+    for (var i=0; i < this.walls.length; i++) {
+        for (var wall of this.walls[i]) {
+            if (this.normals[wall] == undefined) {
+                this.normals[wall] = [];
+            }
+            this.normals[wall].push(new Vector(normals[i][0], normals[i][1]));
+        }
+    }
 }
 
 Structure.prototype = {
@@ -40,7 +49,8 @@ Structure.prototype = {
             let ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
 
             // is the intersection along the segments
-            if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
+            var tolerance = 0.0001;
+            if (ua <= tolerance || ua >= 1 - tolerance || ub <= tolerance || ub >= 1 - tolerance) {
                 continue;
             }
 

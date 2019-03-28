@@ -2,7 +2,7 @@ var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight,{ b
 
 renderer.view.style.position = "absolute";
 renderer.view.style.display = "block";
-renderer.autoResize = true;
+renderer.autoDensity = true;
 renderer.resize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.view);
@@ -31,18 +31,13 @@ stage.addChild(tilingSprite);
 var structures = [];
 structures.push(new Structure(
     [new Vector(200, 100), new Vector(300, 100), new Vector(300, 200), new Vector(200, 200)],
-    [[0, 1], [1, 2], [2, 3], [3, 0]]));
+    [[0, 1], [1, 2], [2, 3], [3, 0]],
+    [[0, -1], [1, 0], [0, 1], [-1, 0]]));
 for (var structure of structures) {
     var graphic = structure.toGraphic();
     graphic.position = player.position;
     stage.addChild(graphic);
 }
-
-// var background = new PIXI.Graphics();
-// background.beginFill(0x229922);
-// background.drawRect(0,0,window.innerWidth,window.innerHeight);
-// background.endFill();
-// stage.addChild(background);
 
 stage.addChild(player);
 
@@ -112,7 +107,7 @@ function updateView(object)
     var FOV = Math.PI/5; // 90 degree FOV
     var viewDistance = 500;
 
-    var vecs = [new Vector(0, 0)];
+    var vecs = [];
 
     var vec = new Vector(viewDistance, 0);
 
@@ -124,9 +119,25 @@ function updateView(object)
 
     for (var structure of structures) {
         // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
-        for (var point of structure.coords) {
+        for (var p=0; p < structure.coords.length; p++) {
+            var point = structure.coords[p];
             if (left.cross(point) > 0 && right.cross(point) < 0) {
                 vecs.push(point.clone());
+                // If we are looking tangent to the edge (all signs should be the same)
+                // console.log(point.cross(structure.normals[p][0]), point.cross(structure.normals[p][1]));
+                // var sign;
+                // for (var normal of structure.normals[p]) {
+                //     if (sign) {
+                //         var newSign = point.cross(normal) > 0;
+                //     }
+                // }
+                var n1 = point.cross(structure.normals[p][0]) > 0;
+                var n2 = point.cross(structure.normals[p][1]) > 0;
+                if ( n1 == n2 ) {
+                    var nextEdge =point.clone().multiply(viewDistance/ point.length());
+                    nextEdge.edgeSide = n1;
+                    vecs.push(nextEdge);
+                }
             }
         }
     }
@@ -141,13 +152,20 @@ function updateView(object)
 
     // After I find all of my vecs, or points, I should sort them based on their angle
     vecs = vecs.sort(function (a, b) {
-        return a.cross(b) < 0;
+        var angle = a.cross(b);
+        if (Math.abs(angle) < 0.00001){
+            if (a.edgeSide != undefined)
+                return a.edgeSide;
+            if (b.edgeSide != undefined)
+                return b.edgeSide;
+        }
+        return angle;
     });
 
     // left.print(path);
     // right.print(path);
 
-    path = [];
+    path = [0, 0];
 
     for (var vec of vecs) {
         // console.log(vec);
