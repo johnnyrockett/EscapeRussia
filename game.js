@@ -40,11 +40,13 @@ function setup() {
     tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
     stage.addChild(tilingSprite);
 
-    structures.push(new Structure(
+    var box = new Structure(
         [new Vector(200, 100), new Vector(300, 100), new Vector(300, 200), new Vector(200, 200)],
         [[0, 1], [1, 2], [2, 3], [3, 0]],
-        [[0, -1], [1, 0], [0, 1], [-1, 0]]));
+        [[0, -1], [1, 0], [0, 1], [-1, 0]]);
 
+    structures.push(box.getInstance(0, 0));
+    structures.push(box.getInstance(200, 100));
 
 
     // //Make a horrizontal coridoor
@@ -57,9 +59,9 @@ function setup() {
     //                                 [[0,2], [1,3] ],
     //                                 [[-1, 0], [1,0]]));
 
+
     for (var structure of structures) {
         var graphic = structure.toGraphic();
-        graphic.position = player.position;
         stage.addChild(graphic);
     }
 
@@ -147,8 +149,13 @@ function updateView(object)
         // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
         for (var p=0; p < structure.coords.length; p++) {
             var point = structure.coords[p];
-            if (left.cross(point) > 0 && right.cross(point) < 0) {
-                vecs.push(point.clone());
+            if (point.length() < viewDistance && left.cross(point) > 0 && right.cross(point) < 0) {
+                var n1 = point.cross(structure.normals[p][0]) > 0;
+                var n2 = point.cross(structure.normals[p][1]) > 0;
+                // console.log(point.dot(Vector.add(structure.normals[p][0], structure.normals[p][1]).normalize()) > 0);
+                // console.log(p, n1, n2);
+                if (point.dot(Vector.add(structure.normals[p][0], structure.normals[p][1]).normalize()) < 0 || n1 == n2)
+                    vecs.push(point.clone());
                 // If we are looking tangent to the edge (all signs should be the same)
                 // console.log(point.cross(structure.normals[p][0]), point.cross(structure.normals[p][1]));
                 // var sign;
@@ -157,8 +164,7 @@ function updateView(object)
                 //         var newSign = point.cross(normal) > 0;
                 //     }
                 // }
-                var n1 = point.cross(structure.normals[p][0]) > 0;
-                var n2 = point.cross(structure.normals[p][1]) > 0;
+
                 if ( n1 == n2 ) {
                     var nextEdge =point.clone().multiply(viewDistance/ point.length());
                     nextEdge.edgeSide = n1;
@@ -171,7 +177,7 @@ function updateView(object)
     // If it isn't behind any walls
     for (var vec of vecs) {
         for (var structure of structures) {
-            vec = structure.getIntersection(vec);
+            vec = structure.getIntersection(vec, {x: 0, y: 0});
         }
     }
 
