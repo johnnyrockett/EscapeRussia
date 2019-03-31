@@ -115,6 +115,12 @@ Vector.prototype = {
     {
         array.push(this.x);
         array.push(this.y);
+    },
+    equals: function(x, y, tolerance) {
+        if (tolerance == undefined) {
+            tolerance = 0;
+        }
+        return Math.abs(this.x - x) < tolerance && Math.abs(this.y - y) < tolerance;
     }
 };
 

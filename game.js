@@ -150,11 +150,11 @@ function updateView(object)
         for (var p=0; p < structure.coords.length; p++) {
             var point = structure.coords[p];
             if (point.length() < viewDistance && left.cross(point) > 0 && right.cross(point) < 0) {
-                var n1 = point.cross(structure.normals[p][0]) > 0;
-                var n2 = point.cross(structure.normals[p][1]) > 0;
+                var n1 = point.cross(structure.pointNormals[p][0]) > 0;
+                var n2 = point.cross(structure.pointNormals[p][1]) > 0;
                 // console.log(point.dot(Vector.add(structure.normals[p][0], structure.normals[p][1]).normalize()) > 0);
                 // console.log(p, n1, n2);
-                if (point.dot(Vector.add(structure.normals[p][0], structure.normals[p][1]).normalize()) < 0 || n1 == n2)
+                if (point.dot(Vector.add(structure.pointNormals[p][0], structure.pointNormals[p][1]).normalize()) < 0 || n1 == n2)
                     vecs.push(point.clone());
                 // If we are looking tangent to the edge (all signs should be the same)
                 // console.log(point.cross(structure.normals[p][0]), point.cross(structure.normals[p][1]));
@@ -167,6 +167,7 @@ function updateView(object)
 
                 if ( n1 == n2 ) {
                     var nextEdge =point.clone().multiply(viewDistance/ point.length());
+                    nextEdge.edgePoint = point;
                     nextEdge.edgeSide = n1;
                     vecs.push(nextEdge);
                 }
@@ -185,7 +186,7 @@ function updateView(object)
     // After I find all of my vecs, or points, I should sort them based on their angle
     vecs = vecs.sort(function (a, b) {
         var angle = a.cross(b);
-        if (Math.abs(angle) < 0.00001){
+        if (Math.abs(angle) < 0.00000001){
             if (a.edgeSide != undefined)
                 return a.edgeSide;
             if (b.edgeSide != undefined)
