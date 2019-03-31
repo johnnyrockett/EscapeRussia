@@ -4,13 +4,15 @@
 * This probably means that I'll need the equation of the wall.
 */
 
-function Structure(coords, walls, normals) {
+function Structure(coords, walls, synthetic) {
     this.coords = coords;
     this.walls = walls;
-    if (normals != undefined) {
+    if (!synthetic) {
         this.wallNormals = [];
-        for (var normal of normals) {
-            this.wallNormals.push(new Vector(normal[0], normal[1]).normalize());
+        for (var wall of walls) {
+            var p1 = this.coords[wall[0]];
+            var p2 = this.coords[wall[1]];
+            this.wallNormals.push(Vector.subtract(p2, p1).rotate(Math.PI/2).normalize());
         }
         this.pointNormals = [];
         for (var i=0; i < this.walls.length; i++) {
@@ -57,7 +59,7 @@ Structure.prototype = {
         for (var point of this.coords) {
             clonePoints.push(Vector.add(point, offset));
         }
-        var clone = new Structure(clonePoints, this.walls);
+        var clone = new Structure(clonePoints, this.walls, true);
         clone.wallNormals = this.wallNormals;
         clone.pointNormals = this.pointNormals;
         return clone;

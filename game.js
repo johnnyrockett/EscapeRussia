@@ -41,19 +41,21 @@ function setup() {
     stage.addChild(tilingSprite);
 
     var box = new Structure(
-        [new Vector(200, 100), new Vector(300, 100), new Vector(300, 200), new Vector(200, 200)],
-        [[0, 1], [1, 2], [2, 3], [3, 0]],
-        [[0, -1], [1, 0], [0, 1], [-1, 0]]);
-
+        [new Vector(100, 0), new Vector(100, 100), new Vector(200, 100), new Vector(200, 0)],
+        [[0, 1], [1, 2], [2, 3], [3, 0]], false);
     var diamond = new Structure(
         [new Vector(0, 0), new Vector(50, 50), new Vector(100, 0), new Vector(50, -50)],
-        [[0, 1], [1, 2], [2, 3], [3, 0]],
-        [[-1, 1], [1, 1], [1, -1], [-1, -1]]
+        [[0, 1], [1, 2], [2, 3], [3, 0]], false);
+
+    var star = new Structure(
+        [new Vector(9, 40), new Vector(32, 60), new Vector(24, 91), new Vector(52, 74), new Vector(78, 91), new Vector(71, 60), new Vector(94, 41), new Vector(64, 38), new Vector(52, 9), new Vector(40, 38)],
+        [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 0]]
     );
 
     structures.push(box.getInstance(0, 0));
     structures.push(box.getInstance(200, 100));
     structures.push(diamond.getInstance(100, -100));
+    structures.push(star.getInstance(-100, -50));
 
 
     // //Make a horrizontal coridoor
@@ -139,7 +141,7 @@ function updateView(object)
     object.triangle.y = object.position.y;
     // console.log(object.rotation);
 
-    var FOV = Math.PI/5; // 90 degree FOV
+    var FOV = Math.PI/4; // 90 degree FOV
     var viewDistance = 500;
 
     // Currently doesn't work with any other value because of instances where I use the lookAt vector as the point
