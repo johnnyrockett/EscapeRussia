@@ -45,8 +45,15 @@ function setup() {
         [[0, 1], [1, 2], [2, 3], [3, 0]],
         [[0, -1], [1, 0], [0, 1], [-1, 0]]);
 
+    var diamond = new Structure(
+        [new Vector(0, 0), new Vector(50, 50), new Vector(100, 0), new Vector(50, -50)],
+        [[0, 1], [1, 2], [2, 3], [3, 0]],
+        [[-1, 1], [1, 1], [1, -1], [-1, -1]]
+    );
+
     structures.push(box.getInstance(0, 0));
     structures.push(box.getInstance(200, 100));
+    structures.push(diamond.getInstance(100, -100));
 
 
     // //Make a horrizontal coridoor
@@ -135,15 +142,23 @@ function updateView(object)
     var FOV = Math.PI/5; // 90 degree FOV
     var viewDistance = 500;
 
+    // Currently doesn't work with any other value because of instances where I use the lookAt vector as the point
+    var relativePosition = new Vector(0, 0);
+
     var vecs = [];
 
     var vec = new Vector(viewDistance, 0);
 
-    var left = vec.rotate(object.rotation - FOV / 2)
-    var right = vec.rotate(object.rotation + FOV / 2)
+
+    var left = Vector.add(relativePosition, vec.rotate(object.rotation - FOV / 2));
+    var right = Vector.add(relativePosition, vec.rotate(object.rotation + FOV / 2));
 
     vecs.push(left);
     vecs.push(right);
+    var samples = 15;
+    for (var i=1; i < samples; i++) {
+        vecs.push(Vector.add(relativePosition, vec.rotate(object.rotation - FOV / 2 + (FOV * (i/(samples+1) )))))
+    }
 
     for (var structure of structures) {
         // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
@@ -178,7 +193,7 @@ function updateView(object)
     // If it isn't behind any walls
     for (var vec of vecs) {
         for (var structure of structures) {
-            vec = structure.getIntersection(vec, {x: 0, y: 0});
+            vec = structure.getIntersection(vec, relativePosition);
         }
     }
 
@@ -198,7 +213,8 @@ function updateView(object)
     // left.print(path);
     // right.print(path);
 
-    path = [0, 0];
+    path = [];
+    relativePosition.print(path);
 
     for (var vec of vecs) {
         // console.log(vec);

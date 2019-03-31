@@ -10,7 +10,7 @@ function Structure(coords, walls, normals) {
     if (normals != undefined) {
         this.wallNormals = [];
         for (var normal of normals) {
-            this.wallNormals.push(new Vector(normal[0], normal[1]));
+            this.wallNormals.push(new Vector(normal[0], normal[1]).normalize());
         }
         this.pointNormals = [];
         for (var i=0; i < this.walls.length; i++) {
