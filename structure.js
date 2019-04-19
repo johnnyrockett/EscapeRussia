@@ -23,13 +23,13 @@ function Structure(coords, walls, synthetic) {
                 this.pointNormals[wall].push(this.wallNormals[i]);
             }
         }
+        var total = new Vector(0, 0);
+        for (var coord of this.coords) {
+            total.add(coord);
+        }
+        total.divide(this.coords.length);
+        this.addOffset(total.negative());
     }
-    // var total = new Vector(0, 0);
-    // for (var coord of this.coords) {
-    //     total.add(coord);
-    // }
-    // total.divide(this.coords.length);
-    // this.addOffset(total.negative());
 }
 
 Structure.prototype = {
@@ -73,12 +73,13 @@ Structure.prototype = {
         }
     },
     getIntersection: function (point, perspective) {
+        // var newPoint = null;
         for (var w=0; w < this.walls.length; w++) {
             var wall = this.walls[w];
 
-            var p1 = this.coords[wall[0]];
-            var p2 = this.coords[wall[1]];
-            var x1 = perspective.x, y1 = perspective.y, x2 = point.x, y2 = point.y, x3 = p1.x, y3 = p1.y, x4 = p2.x, y4 = p2.y;
+            var p1 = Vector.add(perspective, this.coords[wall[0]]);
+            var p2 = Vector.add(perspective, this.coords[wall[1]]);
+            var x1 = 0, y1 = 0, x2 = point.x, y2 = point.y, x3 = p1.x, y3 = p1.y, x4 = p2.x, y4 = p2.y;
 
             denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
 
@@ -104,6 +105,7 @@ Structure.prototype = {
                 continue;
             }
             point.set(x, y);
+            // newPoint = new Vector(x, y);
         }
         // console.log(closest);
         return point;
