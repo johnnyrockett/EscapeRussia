@@ -75,7 +75,7 @@ function setup() {
         [[0,1], [1,2], [3,4], [4,5], [5, 0]]
     );
 
-    structures.push(box.getInstance(0, 0));
+    structures.push(box.getInstance(0, 200));
     structures.push(box.getInstance(200, 100));
     structures.push(diamond.getInstance(100, -100));
     structures.push(star.getInstance(-100, -50));
@@ -273,24 +273,41 @@ function evaluateControls() {
 
     if (offsetX != 0 || offsetY != 0) {
         var offset = new Vector(offsetX, offsetY);
-        var newPosition = Vector.add(player.position, offset);
-        // Check to see if this movement is valid
-        // var intersection = newPosition.clone();
-        // for (var structure of structures) {
-        //     intersection = structure.getIntersection(intersection, {x:0, y:0});
-        //     if (newPosition.equals(intersection.x, intersection.y))
-        //         return;
-        // }
 
-        tilingSprite.tilePosition.x += offsetX;
-        tilingSprite.tilePosition.y += offsetY;
+        var collisionSensitivity = 10;
+        var vec = new Vector(collisionSensitivity, 0);
+        var sensors = [];
+        sensors.push(vec);
+
+        // var lookAt = vec.rotate(object.rotation).normalize();
+
+        var samples = 10;
+        for (var i=1; i < samples; i++) {
+            sensors.push(vec.rotate(Math.PI * 2 / (i/(samples+1) )));
+        }
+
+        for (var sensor of sensors) {
+            // Check to see if this movement is valid
+            var intersection = sensor.clone();
+            for (var structure of structures) {
+                intersection = structure.getIntersection(intersection, offset);
+                // console.log(intersection, offset);
+                if (!sensor.equals(intersection.x, intersection.y, 0.0000000001)) {
+                    // console.log(intersection);
+                    return;
+                }
+            }
+        }
+
+        tilingSprite.tilePosition.x += offset.x;
+        tilingSprite.tilePosition.y += offset.y;
         for (var structure of structures) {
-            structure.addOffset(offsetX, offsetY);
+            structure.addOffset(offset.x, offset.y);
         }
 
         for (var npc of npcs) {
-            npc.position.x += offsetX;
-            npc.position.y += offsetY;
+            npc.position.x += offset.x;
+            npc.position.y += offset.y;
             npc.offset.subtract(offset);
         }
     }

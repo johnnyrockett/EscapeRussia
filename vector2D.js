@@ -67,9 +67,6 @@ Vector.prototype = {
 		}
 		return this;
 	},
-	equals: function(v) {
-		return this.x == v.x && this.y == v.y;
-	},
 	dot: function(v) {
 		return this.x * v.x + this.y * v.y;
 	},
