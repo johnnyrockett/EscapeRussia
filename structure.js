@@ -4,12 +4,21 @@
 * This probably means that I'll need the equation of the wall.
 */
 
-function Structure(coords, walls, synthetic) {
-    this.coords = coords;
-    this.walls = walls;
+function Structure(coords, synthetic) {
+
+    this.coords = [];
+    this.walls = [];
+    var wallIndex = 0;
+    for (var coord of coords) {
+        this.coords.push(coord[0] == undefined ? coord : new Vector(coord[0], coord[1]));
+        if (wallIndex != coords.length-1) {
+            this.walls.push([wallIndex, ++wallIndex]);
+        } else this.walls.push([coords.length-1, 0]);
+    }
+
     if (!synthetic) {
         this.wallNormals = [];
-        for (var wall of walls) {
+        for (var wall of this.walls) {
             var p1 = this.coords[wall[0]];
             var p2 = this.coords[wall[1]];
             this.wallNormals.push(Vector.subtract(p2, p1).rotate(Math.PI/2).normalize());

@@ -49,8 +49,6 @@ function setup() {
     npc.position.x = 100;
     npc.position.y = 100;
     npc.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
-
-    console.log(npc.offset);
     // stage.addChild(npc);
 
     npcs.push(npc);
@@ -58,22 +56,14 @@ function setup() {
     tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
     stage.addChild(tilingSprite);
 
-    var box = new Structure(
-        [new Vector(100, 0), new Vector(100, 100), new Vector(200, 100), new Vector(200, 0)],
-        [[0, 1], [1, 2], [2, 3], [3, 0]], false);
-    var diamond = new Structure(
-        [new Vector(0, 0), new Vector(50, 50), new Vector(100, 0), new Vector(50, -50)],
-        [[0, 1], [1, 2], [2, 3], [3, 0]], false);
+    var box = new Structure([[100, 0], [100, 100], [200, 100], [200, 0]]);
+    var diamond = new Structure([[0, 0], [50, 50], [100, 0], [50, -50]]);
+    var star = new Structure([[9, 40], [32, 60], [24, 91], [52, 74], [78, 91], [71, 60], [94, 41], [64, 38], [52, 9], [40, 38]]);
 
-    var star = new Structure(
-        [new Vector(9, 40), new Vector(32, 60), new Vector(24, 91), new Vector(52, 74), new Vector(78, 91), new Vector(71, 60), new Vector(94, 41), new Vector(64, 38), new Vector(52, 9), new Vector(40, 38)],
-        [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 0]]
-    );
-
-    var nook = new Structure(
-        [new Vector(0, 0), new Vector(-10, 50), new Vector(50, 0), new Vector(110, 50), new Vector(100, 0), new Vector(50, -50)],
-        [[0,1], [1,2], [3,4], [4,5], [5, 0]]
-    );
+    // var nook = new Structure(
+    //     [new Vector(0, 0), new Vector(-10, 50), new Vector(50, 0), new Vector(110, 50), new Vector(100, 0), new Vector(50, -50)],
+    //     [[0,1], [1,2], [3,4], [4,5], [5, 0]]
+    // );
 
     structures.push(box.getInstance(0, 200));
     structures.push(box.getInstance(200, 100));
