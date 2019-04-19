@@ -20,8 +20,7 @@ PIXI.loader
 var carrotTex;
 var player;
 var tilingSprite;
-var structures = [];
-var npcs = [];
+var currentLevel = 0;
 
 function setup() {
     // var texture = PIXI.Texture.from('images/playerWGun.png');
@@ -51,25 +50,17 @@ function setup() {
     npc.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
     // stage.addChild(npc);
 
-    npcs.push(npc);
+    levels[currentLevel].npcs.push(npc);
 
     tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
     stage.addChild(tilingSprite);
-
-    var box = new Structure([[100, 0], [100, 100], [200, 100], [200, 0]]);
-    var diamond = new Structure([[0, 0], [50, 50], [100, 0], [50, -50]]);
-    var star = new Structure([[9, 40], [32, 60], [24, 91], [52, 74], [78, 91], [71, 60], [94, 41], [64, 38], [52, 9], [40, 38]]);
 
     // var nook = new Structure(
     //     [new Vector(0, 0), new Vector(-10, 50), new Vector(50, 0), new Vector(110, 50), new Vector(100, 0), new Vector(50, -50)],
     //     [[0,1], [1,2], [3,4], [4,5], [5, 0]]
     // );
 
-    structures.push(box.getInstance(0, 200));
-    structures.push(box.getInstance(200, 100));
-    structures.push(diamond.getInstance(100, -100));
-    structures.push(star.getInstance(-100, -50));
-    structures.push(star.getInstance(-500, -25));
+
     // structures.push(nook.getInstance(-100, 150));
 
 
@@ -84,13 +75,13 @@ function setup() {
     //                                 [[-1, 0], [1,0]]));
 
 
-    for (var structure of structures) {
+    for (var structure of levels[currentLevel].structures) {
         var graphic = structure.toGraphic();
         stage.addChild(graphic);
     }
 
     stage.addChild(player);
-    for (var npc of npcs) {
+    for (var npc of levels[currentLevel].npcs) {
         stage.addChild(npc);
     }
 
@@ -182,7 +173,7 @@ function updateView(object)
         vecs.push(vec.rotate(object.rotation - FOV / 2 + (FOV * (i/(samples+1) ))));
     }
 
-    for (var structure of structures) {
+    for (var structure of levels[currentLevel].structures) {
         // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
         for (var p=0; p < structure.coords.length; p++) {
             var vec = Vector.add(structure.coords[p], object.offset);
@@ -208,7 +199,7 @@ function updateView(object)
 
     // If it isn't behind any walls
     for (var vec of vecs) {
-        for (var structure of structures) {
+        for (var structure of levels[currentLevel].structures) {
             var newVec = structure.getIntersection(vec, object.offset);
             if (newVec != null)
                 vec = newVec;
@@ -279,7 +270,7 @@ function evaluateControls() {
         for (var sensor of sensors) {
             // Check to see if this movement is valid
             var intersection = sensor.clone();
-            for (var structure of structures) {
+            for (var structure of levels[currentLevel].structures) {
                 intersection = structure.getIntersection(intersection, offset);
                 // console.log(intersection, offset);
                 if (!sensor.equals(intersection.x, intersection.y, 0.0000000001)) {
@@ -291,11 +282,11 @@ function evaluateControls() {
 
         tilingSprite.tilePosition.x += offset.x;
         tilingSprite.tilePosition.y += offset.y;
-        for (var structure of structures) {
+        for (var structure of levels[currentLevel].structures) {
             structure.addOffset(offset.x, offset.y);
         }
 
-        for (var npc of npcs) {
+        for (var npc of levels[currentLevel].npcs) {
             npc.position.x += offset.x;
             npc.position.y += offset.y;
             npc.offset.subtract(offset);
@@ -309,7 +300,7 @@ function animate() {
 
   player.rotation = rotateToPoint(renderer.plugins.interaction.mouse.global.x, renderer.plugins.interaction.mouse.global.y, player.position.x, player.position.y);
   updateView(player);
-  for (var npc of npcs) {
+  for (var npc of levels[currentLevel].npcs) {
       updateView(npc);
   }
 
@@ -322,7 +313,7 @@ function animate() {
   }
 
   // update structures
-  for (var structure of structures) {
+  for (var structure of levels[currentLevel].structures) {
       structure.animate();
   }
   // render the container
