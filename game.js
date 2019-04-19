@@ -187,7 +187,7 @@ function updateView(object)
 
     vecs.push(left);
     vecs.push(right);
-    var samples = 5;
+    var samples = 30;
     for (var i=1; i < samples; i++) {
         vecs.push(vec.rotate(object.rotation - FOV / 2 + (FOV * (i/(samples+1) ))));
     }
@@ -286,6 +286,12 @@ function evaluateControls() {
         tilingSprite.tilePosition.y += offsetY;
         for (var structure of structures) {
             structure.addOffset(offsetX, offsetY);
+        }
+
+        for (var npc of npcs) {
+            npc.position.x += offsetX;
+            npc.position.y += offsetY;
+            npc.offset.subtract(offset);
         }
     }
 }
