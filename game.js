@@ -259,8 +259,6 @@ function evaluateControls() {
 
     if (offsetX != 0 || offsetY != 0) {
         var offset = new Vector(offsetX, offsetY);
-        tilingSprite.tilePosition.x += offset.x;
-        tilingSprite.tilePosition.y += offset.y;
 
         if (currentLevel != -1) {
             var collisionSensitivity = 10;
@@ -298,6 +296,9 @@ function evaluateControls() {
                 npc.offset.subtract(offset);
             }
         }
+
+        tilingSprite.tilePosition.x += offset.x;
+        tilingSprite.tilePosition.y += offset.y;
     }
 }
 
