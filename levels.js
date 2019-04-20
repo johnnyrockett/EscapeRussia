@@ -57,6 +57,7 @@ Level.prototype = {
     
                 // move the sprite to the center of the screen
                 npcSprite.position = npc.position;
+                npcSprite.rotation = npc.rotation;
     
                 npcSprite.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
                 npcSprite.viewDistance = npc.viewDistance;
@@ -79,7 +80,9 @@ levels.push( new Level(
         wallVert.getInstance(wallSeperation, -100),
         wallHor.getInstance(-wallSeperation - 550, -wallSegment + 200),
         wallHor.getInstance(-wallSeperation - 550, -wallSegment + 450),
-        wallHor.getInstance(350, -wallSegment + 200)
+        wallHor.getInstance(350, -wallSegment + 200),
+        star.getInstance(-200, 150),
+        star.getInstance(-250, -250),
 
         //box.getInstance(0, 200),
         //box.getInstance(200, 100),
@@ -88,6 +91,7 @@ levels.push( new Level(
         //star.getInstance(-500, -25)
     ],
     [
-        createNPC(-100, 100, Math.PI, 200, Math.PI/2)
+        createNPC(-100, 100, Math.PI, 200, Math.PI/2),
+        createNPC(0, 100, 0, 700, Math.PI/8),
     ])
 );
