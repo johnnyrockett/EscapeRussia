@@ -20,7 +20,9 @@ PIXI.loader
 var carrotTex;
 var player;
 var tilingSprite;
-var currentLevel = 0;
+var currentLevel = -1;
+
+var levelElements = [];
 
 function setup() {
     // var texture = PIXI.Texture.from('images/playerWGun.png');
@@ -38,22 +40,12 @@ function setup() {
     player.position.y = window.innerHeight/2;
 
     player.offset = new Vector(0, 0);
-
-    npc = new PIXI.Sprite(PIXI.loader.resources.player.texture);
-    // center the sprite's anchor point
-    npc.anchor.x = 0.5;
-    npc.anchor.y = 0.5;
-
-    // move the sprite to the center of the screen
-    npc.position.x = 100;
-    npc.position.y = 100;
-    npc.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
-    // stage.addChild(npc);
-
-    levels[currentLevel].npcs.push(npc);
+    player.viewDistance = 500;
+    player.FOV = Math.PI/4;
 
     tilingSprite = new PIXI.TilingSprite(grass, window.innerWidth, window.innerHeight);
     stage.addChild(tilingSprite);
+    stage.addChild(player);
 
     // var nook = new Structure(
     //     [new Vector(0, 0), new Vector(-10, 50), new Vector(50, 0), new Vector(110, 50), new Vector(100, 0), new Vector(50, -50)],
@@ -74,19 +66,33 @@ function setup() {
     //                                 [[0,2], [1,3] ],
     //                                 [[-1, 0], [1,0]]));
 
-
-    for (var structure of levels[currentLevel].structures) {
-        var graphic = structure.toGraphic();
-        stage.addChild(graphic);
-    }
-
-    stage.addChild(player);
-    for (var npc of levels[currentLevel].npcs) {
-        stage.addChild(npc);
-    }
-
     stage.interactive = true;
     animate();
+    loadLevel(0);
+}
+
+function loadLevel(index) {
+    // take all of the current level's elements off of the stage
+    if (currentLevel != -1) {
+        for (var element of levels[currentLevel].structureElements) {
+            stage.removeChild(element);
+        }
+        for (var element of levels[currentLevel].npcElements) {
+            stage.removeChild(element);
+        }
+    }
+
+    // add all of the new elements to the stage
+    currentLevel = index;
+    if (levels[currentLevel] != undefined) {
+        var elements = levels[currentLevel].getGraphics();
+        for (var structure of elements.structures) {
+            stage.addChild(structure);
+        }
+        for (var npc of elements.npcs) {
+            stage.addChild(npc);
+        }
+    }
 }
 
 stage.on("mousedown", function(e){
@@ -152,57 +158,56 @@ function updateView(object)
     object.triangle.y = origin.y;
     // console.log(object.rotation);
 
-    var FOV = Math.PI/4; // 90 degree FOV
-    var viewDistance = 500;
-
     // Currently doesn't work with any other value because of instances where I use the lookAt vector as the point
 
     var vecs = [];
 
-    var vec = new Vector(viewDistance, 0);
+    var vec = new Vector(object.viewDistance, 0);
 
     // var lookAt = vec.rotate(object.rotation).normalize();
 
-    var left = vec.rotate(object.rotation - FOV / 2);
-    var right = vec.rotate(object.rotation + FOV / 2);
+    var left = vec.rotate(object.rotation - object.FOV / 2);
+    var right = vec.rotate(object.rotation + object.FOV / 2);
 
     vecs.push(left);
     vecs.push(right);
     var samples = 30;
     for (var i=1; i < samples; i++) {
-        vecs.push(vec.rotate(object.rotation - FOV / 2 + (FOV * (i/(samples+1) ))));
+        vecs.push(vec.rotate(object.rotation - object.FOV / 2 + (object.FOV * (i/(samples+1) ))));
     }
 
-    for (var structure of levels[currentLevel].structures) {
-        // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
-        for (var p=0; p < structure.coords.length; p++) {
-            var vec = Vector.add(structure.coords[p], object.offset);
-            if (vec.length() < viewDistance && left.cross(vec) > 0 && right.cross(vec) < 0) {
-                var nDirection1 = vec.dot(structure.pointNormals[p][0]) >= 0;
-                var nDirection2 = vec.dot(structure.pointNormals[p][1]) >= 0;
-                var direction = vec.cross(Vector.add(structure.pointNormals[p][0], structure.pointNormals[p][1]).normalize()) > 0;
-                // Push the point if it has a face that is in our direction
-                if ( !nDirection1 || !nDirection2) {
-                    vecs.push(vec.clone());
+    if (currentLevel != -1) {
+        for (var structure of levels[currentLevel].structures) {
+            // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
+            for (var p=0; p < structure.coords.length; p++) {
+                var vec = Vector.add(structure.coords[p], object.offset);
+                if (vec.length() < object.viewDistance && left.cross(vec) > 0 && right.cross(vec) < 0) {
+                    var nDirection1 = vec.dot(structure.pointNormals[p][0]) >= 0;
+                    var nDirection2 = vec.dot(structure.pointNormals[p][1]) >= 0;
+                    var direction = vec.cross(Vector.add(structure.pointNormals[p][0], structure.pointNormals[p][1]).normalize()) > 0;
+                    // Push the point if it has a face that is in our direction
+                    if ( !nDirection1 || !nDirection2) {
+                        vecs.push(vec.clone());
 
-                    // Push the edge if it also has a face in the other direction
-                    if ((nDirection1 || nDirection2)) {
-                        var nextEdge =vec.clone().multiply(viewDistance/ vec.length());
-                        nextEdge.edgePoint = vec;
-                        nextEdge.edgeSide = direction;
-                        vecs.push(nextEdge);
+                        // Push the edge if it also has a face in the other direction
+                        if ((nDirection1 || nDirection2)) {
+                            var nextEdge =vec.clone().multiply(object.viewDistance/ vec.length());
+                            nextEdge.edgePoint = vec;
+                            nextEdge.edgeSide = direction;
+                            vecs.push(nextEdge);
+                        }
                     }
                 }
             }
         }
-    }
 
-    // If it isn't behind any walls
-    for (var vec of vecs) {
-        for (var structure of levels[currentLevel].structures) {
-            var newVec = structure.getIntersection(vec, object.offset);
-            if (newVec != null)
-                vec = newVec;
+        // If it isn't behind any walls
+        for (var vec of vecs) {
+            for (var structure of levels[currentLevel].structures) {
+                var newVec = structure.getIntersection(vec, object.offset);
+                if (newVec != null)
+                    vec = newVec;
+            }
         }
     }
 
@@ -254,69 +259,75 @@ function evaluateControls() {
 
     if (offsetX != 0 || offsetY != 0) {
         var offset = new Vector(offsetX, offsetY);
-
-        var collisionSensitivity = 10;
-        var vec = new Vector(collisionSensitivity, 0);
-        var sensors = [];
-        sensors.push(vec);
-
-        // var lookAt = vec.rotate(object.rotation).normalize();
-
-        var samples = 10;
-        for (var i=1; i < samples; i++) {
-            sensors.push(vec.rotate(Math.PI * 2 / (i/(samples+1) )));
-        }
-
-        for (var sensor of sensors) {
-            // Check to see if this movement is valid
-            var intersection = sensor.clone();
-            for (var structure of levels[currentLevel].structures) {
-                intersection = structure.getIntersection(intersection, offset);
-                // console.log(intersection, offset);
-                if (!sensor.equals(intersection.x, intersection.y, 0.0000000001)) {
-                    // console.log(intersection);
-                    return;
-                }
-            }
-        }
-
         tilingSprite.tilePosition.x += offset.x;
         tilingSprite.tilePosition.y += offset.y;
-        for (var structure of levels[currentLevel].structures) {
-            structure.addOffset(offset.x, offset.y);
-        }
 
-        for (var npc of levels[currentLevel].npcs) {
-            npc.position.x += offset.x;
-            npc.position.y += offset.y;
-            npc.offset.subtract(offset);
+        if (currentLevel != -1) {
+            var collisionSensitivity = 10;
+            var vec = new Vector(collisionSensitivity, 0);
+            var sensors = [];
+            sensors.push(vec);
+
+            // var lookAt = vec.rotate(object.rotation).normalize();
+
+            var samples = 10;
+            for (var i=1; i < samples; i++) {
+                sensors.push(vec.rotate(Math.PI * 2 / (i/(samples+1) )));
+            }
+
+            for (var sensor of sensors) {
+                // Check to see if this movement is valid
+                var intersection = sensor.clone();
+                for (var structure of levels[currentLevel].structures) {
+                    intersection = structure.getIntersection(intersection, offset);
+                    // console.log(intersection, offset);
+                    if (!sensor.equals(intersection.x, intersection.y, 0.0000000001)) {
+                        // console.log(intersection);
+                        return;
+                    }
+                }
+            }
+
+            for (var structure of levels[currentLevel].structures) {
+                structure.addOffset(offset.x, offset.y);
+            }
+
+            for (var npc of levels[currentLevel].npcElements) {
+                npc.position.x += offset.x;
+                npc.position.y += offset.y;
+                npc.offset.subtract(offset);
+            }
         }
     }
 }
 
 function animate() {
 
-  evaluateControls();
+    evaluateControls();
 
-  player.rotation = rotateToPoint(renderer.plugins.interaction.mouse.global.x, renderer.plugins.interaction.mouse.global.y, player.position.x, player.position.y);
-  updateView(player);
-  for (var npc of levels[currentLevel].npcs) {
-      updateView(npc);
-  }
+    player.rotation = rotateToPoint(renderer.plugins.interaction.mouse.global.x, renderer.plugins.interaction.mouse.global.y, player.position.x, player.position.y);
+    updateView(player);
+    if (currentLevel != -1) {
+        for (var npc of levels[currentLevel].npcElements) {
+            updateView(npc);
+        }
 
-  for(var b=bullets.length-1;b>=0;b--){
-    bullets[b].position.x += Math.cos(bullets[b].rotation)*bulletSpeed;
-    bullets[b].position.y += Math.sin(bullets[b].rotation)*bulletSpeed;
-    if (outside(bullets[b].position)) {
-        stage.removeChild(bullets[b]);
+        // update structures
+        for (var structure of levels[currentLevel].structures) {
+            structure.animate(stage);
+        }
     }
-  }
 
-  // update structures
-  for (var structure of levels[currentLevel].structures) {
-      structure.animate();
-  }
-  // render the container
-  renderer.render(stage);
-  requestAnimationFrame(animate);
+    for(var b=bullets.length-1;b>=0;b--){
+        bullets[b].position.x += Math.cos(bullets[b].rotation)*bulletSpeed;
+        bullets[b].position.y += Math.sin(bullets[b].rotation)*bulletSpeed;
+        if (outside(bullets[b].position)) {
+            stage.removeChild(bullets[b]);
+        }
+    }
+
+
+    // render the container
+    renderer.render(stage);
+    requestAnimationFrame(animate);
 }

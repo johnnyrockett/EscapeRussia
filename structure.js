@@ -49,7 +49,7 @@ Structure.prototype = {
         // this.graphic.position.y = this.offset.y;
         return this.graphic;
     },
-    animate: function() {
+    animate: function(container) {
         this.graphic.clear();
         this.graphic.beginFill(0xFFFFFF, 1.0);
         this.graphic.lineStyle(0, 0xFFFFFF, 1.0);
@@ -58,6 +58,7 @@ Structure.prototype = {
             point.print(path);
         }
 
+        // container.mask = this.graphic;
         this.graphic.drawPolygon(path);
         this.graphic.endFill();
     },
