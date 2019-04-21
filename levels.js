@@ -102,7 +102,7 @@ levels.push( new Level(
         //star.getInstance(-500, -25)
     ],
     [
-        createNPC(-100, 100, Math.PI, 200, Math.PI/2),
-        createNPC(0, 100, 0, 700, Math.PI/8),
+        createNPC(5*wu, 2.75*wu, Math.PI, 2*wu, Math.PI/2),
+        createNPC(13.75*wu, 2.75*wu, Math.PI, 2.4*wu, Math.PI/8),
     ])
 );
