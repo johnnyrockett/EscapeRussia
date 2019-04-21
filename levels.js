@@ -81,7 +81,7 @@ levels.push( new Level(
         wallHor.getInstance(-wallSeperation - 550, -wallSegment + 200),
         wallHor.getInstance(-wallSeperation - 550, -wallSegment + 450),
         wallHor.getInstance(350, -wallSegment + 200),
-        star.getInstance(-200, 150),
+        star.getInstance(-200, 148),
         star.getInstance(-250, -250),
 
         //box.getInstance(0, 200),
