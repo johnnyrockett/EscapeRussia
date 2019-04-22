@@ -78,6 +78,7 @@ function loadLevel(index) {
             stage.removeChild(element);
         }
         for (var element of levels[currentLevel].npcElements) {
+            element.triangle.clear();
             stage.removeChild(element);
         }
     }
@@ -85,6 +86,9 @@ function loadLevel(index) {
     // add all of the new elements to the stage
     currentLevel = index;
     if (levels[currentLevel] != undefined) {
+        for (var structure of levels[currentLevel].structures) {
+            structure.reset();
+        }
         var elements = levels[currentLevel].getGraphics();
         for (var structure of elements.structures) {
             stage.addChild(structure);
@@ -227,20 +231,42 @@ function updateView(object)
     // left.print(path);
     // right.print(path);
 
-    path = [0, 0];
+    object.triangle.path = [0, 0];
 
     for (var vec of vecs) {
         // console.log(vec);
-        vec.print(path);
+        vec.print(object.triangle.path);
     }
 
-    object.triangle.drawPolygon(path);
+    object.triangle.drawPolygon(object.triangle.path);
     // console.log(path);
     object.triangle.endFill();
 }
 
 function outside(position) {
     return position.x < 0 || position.x > window.innerWidth || position.y < 0 || position.y > window.innerHeight;
+}
+
+function isPlayerWithin(npc) {
+    var x = player.position.x, y = player.position.y;
+
+    var adjustedPath = [];
+    var npcPosition = new Vector(npc.position);
+    for (var i=0; i < npc.triangle.path.length-1; i+=2) {
+        adjustedPath.push(Vector.add(npcPosition, new Vector(npc.triangle.path[i], npc.triangle.path[i+1])));
+    }
+
+    var inside = false;
+    for (var i = 0, j = adjustedPath.length - 1; i < adjustedPath.length; j = i++) {
+        var xi = adjustedPath[i].x, yi = adjustedPath[i].y;
+        var xj = adjustedPath[j].x, yj = adjustedPath[j].y;
+
+        var intersect = ((yi > y) != (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
 }
 
 var movementSpeed = 3;
@@ -311,6 +337,8 @@ function animate() {
     if (currentLevel != -1) {
         for (var npc of levels[currentLevel].npcElements) {
             updateView(npc);
+            if (isPlayerWithin(npc))
+                loadLevel(currentLevel);
         }
 
         // update structures

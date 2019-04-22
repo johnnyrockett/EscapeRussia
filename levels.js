@@ -45,31 +45,29 @@ function Level(structures, npcs) {
 
 Level.prototype = {
 	getGraphics: function() {
-        if (this.structureElements == undefined) {
-            this.structureElements = [];
-            for (var structure of this.structures) {
-                var graphic = structure.toGraphic();
-                this.structureElements.push(graphic);
-            }
+        this.structureElements = [];
+        for (var structure of this.structures) {
+            var graphic = structure.toGraphic();
+            this.structureElements.push(graphic);
+        }
 
-            this.npcElements = [];
-            for (var npc of this.npcs) {
+        this.npcElements = [];
+        for (var npc of this.npcs) {
 
-                var npcSprite = new PIXI.Sprite(PIXI.loader.resources.player.texture);
-                // center the sprite's anchor point
-                npcSprite.anchor.x = 0.5;
-                npcSprite.anchor.y = 0.5;
-    
-                // move the sprite to the center of the screen
-                npcSprite.position = npc.position;
-                npcSprite.rotation = npc.rotation;
-    
-                npcSprite.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
-                npcSprite.viewDistance = npc.viewDistance;
-                npcSprite.FOV = npc.FOV;
+            var npcSprite = new PIXI.Sprite(PIXI.loader.resources.player.texture);
+            // center the sprite's anchor point
+            npcSprite.anchor.x = 0.5;
+            npcSprite.anchor.y = 0.5;
 
-                this.npcElements.push(npcSprite);
-            }
+            // move the sprite to the center of the screen
+            npcSprite.position = npc.position;
+            npcSprite.rotation = npc.rotation;
+
+            npcSprite.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
+            npcSprite.viewDistance = npc.viewDistance;
+            npcSprite.FOV = npc.FOV;
+
+            this.npcElements.push(npcSprite);
         }
         return { structures: this.structureElements, npcs: this.npcElements };
     }
@@ -104,5 +102,6 @@ levels.push( new Level(
     [
         createNPC(5*wu, 2.75*wu, Math.PI, 2*wu, Math.PI/2),
         createNPC(13.75*wu, 2.75*wu, Math.PI, 2.4*wu, Math.PI/8),
+        createNPC(0, 50, 0, 500, Math.PI/4),
     ])
 );

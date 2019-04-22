@@ -63,23 +63,32 @@ Structure.prototype = {
         this.graphic.endFill();
     },
     getInstance: function(x, y) {
-        var offset = new Vector(x, y);
-        this.offset = offset;
+        offset = new Vector(x, y);
         var clonePoints = [];
         for (var point of this.coords) {
             clonePoints.push(Vector.add(point, offset));
         }
         var clone = new Structure(clonePoints, this.walls, true);
+        clone.offset = new Vector(0, 0);
         clone.wallNormals = this.wallNormals;
         clone.pointNormals = this.pointNormals;
         return clone;
     },
     addOffset: function(x, y) {
         if (x != 0 || y != 0) {
+            var offset = new Vector(x, y);
+            if (this.offset != undefined)
+                this.offset.add(offset);
             for (var coord of this.coords) {
-                coord.add(new Vector(x, y));
+                coord.add(offset);
             }
-            // console.log(this.coords);
+        }
+    },
+    reset: function() {
+        if (this.offset != undefined) {
+            var resetOffset = this.offset.negative();
+            this.addOffset(resetOffset.x, resetOffset.y);
+            this.offset = new Vector(0, 0);
         }
     },
     getIntersection: function (point, perspective) {
