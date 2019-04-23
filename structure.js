@@ -5,6 +5,7 @@
 */
 
 function Structure(coords, synthetic) {
+    this.color = 0xFFFFFF;
 
     this.coords = [];
     this.walls = [];
@@ -49,10 +50,10 @@ Structure.prototype = {
         // this.graphic.position.y = this.offset.y;
         return this.graphic;
     },
-    animate: function(container) {
+    animate: function() {
         this.graphic.clear();
-        this.graphic.beginFill(0xFFFFFF, 1.0);
-        this.graphic.lineStyle(0, 0xFFFFFF, 1.0);
+        this.graphic.beginFill(this.color, 1.0);
+        this.graphic.lineStyle(0, this.color, 1.0);
         var path = [];
         for (var point of this.coords) {
             point.print(path);
@@ -62,13 +63,17 @@ Structure.prototype = {
         this.graphic.drawPolygon(path);
         this.graphic.endFill();
     },
+    getPath: function() {
+        return this.coords;
+    },
     getInstance: function(x, y) {
         offset = new Vector(x, y);
         var clonePoints = [];
         for (var point of this.coords) {
             clonePoints.push(Vector.add(point, offset));
         }
-        var clone = new Structure(clonePoints, this.walls, true);
+        var clone = new Structure(clonePoints, true);
+        clone.color = this.color;
         clone.offset = new Vector(0, 0);
         clone.wallNormals = this.wallNormals;
         clone.pointNormals = this.pointNormals;

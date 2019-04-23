@@ -73,7 +73,7 @@ function setup() {
 
 function loadLevel(index) {
     // take all of the current level's elements off of the stage
-    if (currentLevel != -1) {
+    if (levels[currentLevel] != undefined) {
         for (var element of levels[currentLevel].structureElements) {
             stage.removeChild(element);
         }
@@ -180,7 +180,7 @@ function updateView(object)
         vecs.push(vec.rotate(object.rotation - object.FOV / 2 + (object.FOV * (i/(samples+1) ))));
     }
 
-    if (currentLevel != -1) {
+    if (levels[currentLevel] != undefined) {
         for (var structure of levels[currentLevel].structures) {
             // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
             for (var p=0; p < structure.coords.length; p++) {
@@ -247,19 +247,13 @@ function outside(position) {
     return position.x < 0 || position.x > window.innerWidth || position.y < 0 || position.y > window.innerHeight;
 }
 
-function isPlayerWithin(npc) {
+function isPlayerWithin(path) {
     var x = player.position.x, y = player.position.y;
 
-    var adjustedPath = [];
-    var npcPosition = new Vector(npc.position);
-    for (var i=0; i < npc.triangle.path.length-1; i+=2) {
-        adjustedPath.push(Vector.add(npcPosition, new Vector(npc.triangle.path[i], npc.triangle.path[i+1])));
-    }
-
     var inside = false;
-    for (var i = 0, j = adjustedPath.length - 1; i < adjustedPath.length; j = i++) {
-        var xi = adjustedPath[i].x, yi = adjustedPath[i].y;
-        var xj = adjustedPath[j].x, yj = adjustedPath[j].y;
+    for (var i = 0, j = path.length - 1; i < path.length; j = i++) {
+        var xi = path[i].x, yi = path[i].y;
+        var xj = path[j].x, yj = path[j].y;
 
         var intersect = ((yi > y) != (yj > y))
             && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
@@ -286,7 +280,7 @@ function evaluateControls() {
     if (offsetX != 0 || offsetY != 0) {
         var offset = new Vector(offsetX, offsetY);
 
-        if (currentLevel != -1) {
+        if (levels[currentLevel] != undefined) {
             var collisionSensitivity = 10;
             var vec = new Vector(collisionSensitivity, 0);
             var sensors = [];
@@ -315,6 +309,18 @@ function evaluateControls() {
             for (var structure of levels[currentLevel].structures) {
                 structure.addOffset(offset.x, offset.y);
             }
+            for (var goal of levels[currentLevel].endGoals) {
+                goal.addOffset(offset.x, offset.y);
+                var path = []
+                var playerPos = new Vector(player.position);
+                for (var coord of goal.getPath()) {
+                    path.push(Vector.add(playerPos, coord));
+                }
+                if (isPlayerWithin(path)) {
+                    loadLevel(currentLevel+1);
+                    return;
+                }
+            }
 
             for (var npc of levels[currentLevel].npcElements) {
                 npc.position.x += offset.x;
@@ -334,16 +340,25 @@ function animate() {
 
     player.rotation = rotateToPoint(renderer.plugins.interaction.mouse.global.x, renderer.plugins.interaction.mouse.global.y, player.position.x, player.position.y);
     updateView(player);
-    if (currentLevel != -1) {
+    if (levels[currentLevel] != undefined) {
         for (var npc of levels[currentLevel].npcElements) {
             updateView(npc);
-            if (isPlayerWithin(npc))
+            var adjustedPath = [];
+            var npcPosition = new Vector(npc.position);
+            for (var i=0; i < npc.triangle.path.length-1; i+=2) {
+                adjustedPath.push(Vector.add(npcPosition, new Vector(npc.triangle.path[i], npc.triangle.path[i+1])));
+            }
+            if (isPlayerWithin(adjustedPath))
                 loadLevel(currentLevel);
         }
 
         // update structures
         for (var structure of levels[currentLevel].structures) {
-            structure.animate(stage);
+            structure.animate();
+        }
+
+        for (var goal of levels[currentLevel].endGoals) {
+            goal.animate();
         }
     }
 

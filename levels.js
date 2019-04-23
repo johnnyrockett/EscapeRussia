@@ -38,9 +38,10 @@ var wallGapFiller = new Structure(
     
 */
 
-function Level(structures, npcs) {
+function Level(structures, npcs, endGoals) {
     this.structures = structures;
     this.npcs = npcs;
+    this.endGoals = endGoals;
 }
 
 Level.prototype = {
@@ -48,6 +49,12 @@ Level.prototype = {
         this.structureElements = [];
         for (var structure of this.structures) {
             var graphic = structure.toGraphic();
+            this.structureElements.push(graphic);
+        }
+
+        for (var goal of this.endGoals) {
+            goal.color = 0x0000FF;
+            var graphic = goal.toGraphic();
             this.structureElements.push(graphic);
         }
 
@@ -103,5 +110,8 @@ levels.push( new Level(
         createNPC(5*wu, 2.75*wu, Math.PI, 2*wu, Math.PI/2),
         createNPC(13.75*wu, 2.75*wu, Math.PI, 2.4*wu, Math.PI/8),
         createNPC(0, 50, 0, 500, Math.PI/4),
+    ],
+    [
+        star.getInstance(0, -200)
     ])
 );
