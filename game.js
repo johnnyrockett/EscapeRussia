@@ -89,6 +89,9 @@ function loadLevel(index) {
         for (var structure of levels[currentLevel].structures) {
             structure.reset();
         }
+        for (var goal of levels[currentLevel].endGoals) {
+            goal.reset();
+        }
         var elements = levels[currentLevel].getGraphics();
         for (var structure of elements.structures) {
             stage.addChild(structure);
