@@ -88,23 +88,7 @@ levels.push( new Level(
         levelLoopLeftSideBig.getInstance(-10*wu,-6.2*wu),
         levelLoopLeftSideSmall.getInstance(-10.3*wu, -16*wu),
         levalLoopRightSideLow.getInstance(12*wu,-5*wu)
-        // wallGapFiller.getInstance(0, 350),
-        // wallGapFiller.getInstance(-2*wallSegment + 600, -wallSegment + 300),
-        // wallGapFiller.getInstance(-2*wallSegment + 600, -wallSegment + 400),
-        // wallVert.getInstance(-wallSeperation, -100),
-        // wallVert.getInstance(-4*wallSeperation - 1000, -wallSegment -250),
-        // wallVert.getInstance(wallSeperation, -100),
-        // wallHor.getInstance(-wallSeperation - 550, -wallSegment + 200),
-        // wallHor.getInstance(-wallSeperation - 550, -wallSegment + 450),
-        // wallHor.getInstance(350, -wallSegment + 200),
-        // star.getInstance(-200, 148),
-        // star.getInstance(-250, -250),
-
-        //box.getInstance(0, 200),
-        //box.getInstance(200, 100),
-        //diamond.getInstance(100, -100),
-        //star.getInstance(-100, -50),
-        //star.getInstance(-500, -25)
+        
     ],
     [
         createNPC(5*wu, 2.75*wu, Math.PI, 2*wu, Math.PI/2),

@@ -279,6 +279,19 @@ function evaluateControls() {
         offsetX += movementSpeed;
     if (keys["w"])
         offsetY += movementSpeed;
+    // if (keys["c"]){
+    //     for (var npc of levels[currentLevel].npcElements) {
+    //         updateView(npc);
+    //         var adjustedPath = [];
+    //         var npcPosition = new Vector(npc.position);
+    //         for (var i=0; i < 50; i+=2) {
+    //             adjustedPath.push(Vector.add(npcPosition, new Vector(npc.triangle.path[i], npc.triangle.path[i+1])));
+    //         }
+    //         if (isPlayerWithin(adjustedPath))
+    //             console.log("Close enough");
+    //             //remove enemy from stack or set position to very far away.
+    //     }
+    // }
 
     if (offsetX != 0 || offsetY != 0) {
         var offset = new Vector(offsetX, offsetY);
