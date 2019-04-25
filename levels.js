@@ -15,6 +15,13 @@ var levelLoopRightSideCenter = new Structure([[0,0], [9*wu, 0], [9*wu, -5*wu], [
 var levelLoopLeftSideSmall = new Structure([[0,0], [4*wu, 0], [4*wu, -5*wu], [0, -5*wu]]);//, [0, 0], [wu, -wu], [wu, -4*wu], [3*wu, -4*wu], [3*wu, -wu], [wu, -wu]]);
 var levelLoopLeftSideBig = new Structure([[0,0], [0, 11*wu], [4*wu, 11*wu], [4*wu, 4*wu], [12*wu, 4*wu], [12*wu, 10*wu], [18*wu, 10*wu], [18*wu, 0]]);//, [0, 0], [wu, wu], [17*wu, wu], [17*wu, 9*wu], [13*wu, 9*wu], [13*wu, 3*wu], [3*wu, 3*wu], [3*wu, 10*wu], [wu, 10*wu], [wu, wu]]);
 
+var levelTwoMainPart = new Structure([[0,0], [2*wu, 0], [2*wu, 6*wu], [9*wu, 6*wu], [9*wu, 8*wu], [16*wu, 8*wu], [16*wu, 10*wu], [28*wu, 10*wu], [28*wu, 0], [32*wu, 0], [32*wu, -3*wu], [5*wu, -3*wu], [5*wu, -6*wu], [15*wu, -6*wu], [15*wu, -9*wu], [2*wu, -9*wu], [2*wu, -3*wu], [0, -3*wu], [0, 0], 
+    [wu, -wu], [wu, -2*wu], [3*wu, -2*wu], [3*wu, -8*wu], [14*wu, -8*wu], [14*wu, -7*wu], [4*wu, -7*wu], [4*wu, -2*wu], [31*wu, -2*wu], [31*wu, -wu], [27*wu, -wu], [27*wu, 9*wu], [17*wu, 9*wu], [17*wu, 7*wu], [10*wu, 7*wu], [10*wu, 5*wu], [3*wu, 5*wu], [3*wu, -wu], [wu, -wu]]);
+
+var levelTwoSmallLoop = new Structure([[0,0], [0, 5*wu], [6*wu, 5*wu], [6*wu, 3*wu], [14*wu, 3*wu], [14*wu, 0]]);
+
+var levelTwoBigLoop = new Structure([[0, 0], [14*wu, 0], [14*wu, 1*wu], [7*wu, wu], [7*wu, 2*wu], [15*wu, 2*wu], [15*wu, -7*wu], [8*wu, -7*wu], [8*wu, -3*wu], [0, -3*wu]]);
+
 
 function createNPC(x, y, rotation, viewDistance, FOV) {
 
@@ -29,14 +36,6 @@ function createNPC(x, y, rotation, viewDistance, FOV) {
     };
 }
       
-/*
-var wallHor = new Structure(
-    [new Vector(100, 0), new Vector(100, 100), new Vector(wallSegment + 100, 100), new Vector(wallSegment+100, 0)], [[0,1], [1,2], [2,3], [3,0]], false);
-
-var wallGapFiller = new Structure(
-    [new Vector(0,0), new Vector(wallSeperation + 1, 0), new Vector(wallSeperation + 1, 101), new Vector(0, 101)], [[0,1], [1,2], [2,3], [3,0]], false);
-    
-*/
 
 function Level(structures, npcs, endGoals) {
     this.structures = structures;
@@ -82,6 +81,24 @@ Level.prototype = {
 
 levels.push( new Level(
     [
+        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu), 
+        levelTwoSmallLoop.getInstance(9*wu, 3.3*wu), 
+        levelTwoBigLoop.getInstance(18*wu, 6.2*wu)
+    ],
+
+    [
+        createNPC(20*wu, -1*wu, Math.PI, 5*wu, Math.PI/2),
+        createNPC(27*wu, 5*wu, Math.PI, 5*wu, Math.PI/2),
+        createNPC(31.5*wu, 13*wu, Math.PI, 4*wu, Math.PI/2)
+    ],
+
+    [
+        star.getInstance(28*wu, 0)
+    ])
+);
+
+levels.push( new Level(
+    [
         levelMainPart.getInstance(0,-10*wu),
         levelLoopUpRight.getInstance(20.15*wu,-17.1*wu),
         levelLoopRightSideCenter.getInstance(5.23*wu,-10*wu),
@@ -96,6 +113,6 @@ levels.push( new Level(
         createNPC(0, 50, 0, 500, Math.PI/4),
     ],
     [
-        star.getInstance(0, -200)
+        star.getInstance(0, -22*wu)
     ])
 );
