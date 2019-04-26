@@ -114,9 +114,9 @@ levels.push( new Level(
     [
         createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2, [new Vector(-2*wu, 0)]),
         createNPC(16*wu, 4.2*wu, Math.PI, 5*wu, Math.PI/2),
-        createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2),
+        createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2, [new Vector(-9*wu, 0)]),
         createNPC(24.8*wu, 2*wu, 3*Math.PI/2, 4*wu, Math.PI/2),
-        createNPC(12*wu, 0, Math.PI, 4*wu, Math.PI/2)
+        createNPC(12*wu, 0, Math.PI, 4*wu, Math.PI/2, [new Vector(-2*wu, 0)])
     ],
 
     [
