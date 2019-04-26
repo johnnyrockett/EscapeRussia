@@ -4,7 +4,7 @@ var box = new Structure([[100, 0], [100, 100], [200, 100], [200, 0]]);
 var diamond = new Structure([[0, 0], [50, 50], [100, 0], [50, -50]]);
 var star = new Structure([[9, 40], [32, 60], [24, 91], [52, 74], [78, 91], [71, 60], [94, 41], [64, 38], [52, 9], [40, 38]]);
 
-var wu = 20
+var wu = 100
 var levelMainPart = new Structure([[0,0], [3*wu, 0], [3*wu, 12*wu], [13*wu, 12*wu], [13*wu, 9*wu], [11*wu, 9*wu], [11*wu, 5*wu], [15*wu, 5*wu], [15*wu, 11*wu], [22*wu, 11*wu], [22*wu, 14*wu], [25*wu, 14*wu], [25*wu, 11*wu], [29*wu, 11*wu], [29*wu, 8*wu], [25*wu, 8*wu], [25*wu, 6*wu], [31*wu, 6*wu], [31*wu, 10*wu], [40*wu, 10*wu], [40*wu, 8*wu], [45*wu, 8*wu], [45*wu, -1*wu], [49*wu, -1*wu], [49*wu, -10*wu],[38*wu, -10*wu], [38*wu, -1*wu], [42*wu, -1*wu], [42*wu, 5*wu], [40*wu, 5*wu], [40*wu, 3*wu], [35*wu, 3*wu], [35*wu, -3*wu], [25*wu, -3*wu], [25*wu, -13*wu], [22*wu, -13*wu], [22*wu, -3*wu], [17*wu, -3*wu], [17*wu, -9*wu], [9*wu, -9*wu], [9*wu, -15*wu], [6*wu, -15*wu], [6*wu, -6*wu], [9*wu, -6*wu], [9*wu, -3*wu], [0, -3*wu], [0,0], 
 [wu, -wu], [wu, -2*wu], [10*wu, -2*wu], [10*wu, -7*wu], [7*wu, -7*wu], [7*wu, -14*wu], [8*wu, -14*wu], [8*wu, -8*wu], [16*wu, -8*wu], [16*wu, -2*wu], [23*wu, -2*wu], [23*wu, -12*wu], [24*wu, -12*wu], [24*wu, -2*wu], [34*wu, -2*wu], [34*wu, 4*wu], [39*wu, 4*wu], [39*wu, 6*wu], [43*wu, 6*wu], [43*wu, -2*wu], [39*wu, -2*wu], [39*wu, -9*wu], [48*wu, -9*wu], [48*wu, -2*wu], [44*wu, -2*wu], [44*wu, 7*wu], [39*wu, 7*wu], [39*wu, 9*wu], [32*wu, 9*wu], [32*wu, 5*wu], [24*wu, 5*wu], [24*wu, 9*wu], [28*wu, 9*wu], [28*wu, 10*wu], [24*wu, 10*wu], [24*wu, 13*wu], [23*wu, 13*wu], [23*wu, 10*wu], [16*wu, 10*wu], [16*wu, 4*wu], [10*wu, 4*wu], [10*wu, 10*wu], [12*wu, 10*wu], [12*wu, 11*wu], [4*wu, 11*wu], [4*wu, -1*wu], [wu, -1*wu] ]);
 
@@ -22,6 +22,11 @@ var levelTwoSmallLoop = new Structure([[0,0], [0, 5*wu], [6*wu, 5*wu], [6*wu, 3*
 
 var levelTwoBigLoop = new Structure([[0, 0], [14*wu, 0], [14*wu, 1*wu], [7*wu, wu], [7*wu, 2*wu], [15*wu, 2*wu], [15*wu, -7*wu], [8*wu, -7*wu], [8*wu, -3*wu], [0, -3*wu]]);
 
+var h = 30;
+
+var v = 20;
+
+var introLoop = new Structure([[0,0], [h*wu, 0], [h*wu, -v*wu], [0, -v*wu], [0, 0,], [wu, -wu], [wu, (-v+1)*wu], [(h-1)*wu, (-v+1)*wu], [(h-1)*wu, -wu], [wu, -wu]]);
 
 function createNPC(x, y, rotation, viewDistance, FOV) {
 
@@ -82,6 +87,19 @@ Level.prototype = {
     }
 };
 
+levels.push( new Level(
+    [
+        introLoop.getInstance(0, 0)
+    ],
+
+    [
+
+    ],
+
+    [
+        star.getInstance(0, -2*wu)
+    ])
+);
 
 levels.push( new Level(
     [
@@ -94,7 +112,7 @@ levels.push( new Level(
         createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2),
         createNPC(16*wu, 4.2*wu, Math.PI, 5*wu, Math.PI/2),
         createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2),
-        createNPC(24.5*wu, 2*wu, Math.PI, 4*wu, Math.PI/2),
+        createNPC(24.8*wu, 2*wu, 3*Math.PI/2, 4*wu, Math.PI/2),
         createNPC(12*wu, 0, Math.PI, 4*wu, Math.PI/2)
     ],
 
