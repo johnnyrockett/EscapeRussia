@@ -249,7 +249,8 @@ function isPlayerWithin(path) {
     return inside;
 }
 
-var movementSpeed = 3;
+var movementSpeed = 4.5;
+var npcMovementSpeed = 3;
 var rotationSpeed = Math.PI/25;
 
 function evaluateControls() {
@@ -367,12 +368,12 @@ function moveAlongPath(npc) {
     npc.rotation = npc.currentVec.toAngles();
 
     var movementVec;
-    if (npc.currentVec.length() < movementSpeed) {
+    if (npc.currentVec.length() < npcMovementSpeed) {
         movementVec = npc.currentVec;
         npc.currentVec = null;
         npc.pathIndex++;
     } else {
-        movementVec = npc.currentVec.clone().normalize().multiply(movementSpeed);
+        movementVec = npc.currentVec.clone().normalize().multiply(npcMovementSpeed);
         npc.currentVec.subtract(movementVec);
     }
 
