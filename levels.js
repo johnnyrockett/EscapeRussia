@@ -66,10 +66,11 @@ Level.prototype = {
             npcSprite.anchor.y = 0.5;
 
             // move the sprite to the center of the screen
-            npcSprite.position = npc.position;
+            npcSprite.offset = new Vector(npc.position);
+
+            npcSprite.position = Vector.add(new Vector(player.position), npcSprite.offset);
             npcSprite.rotation = npc.rotation;
 
-            npcSprite.offset = Vector.subtract(new Vector(player.position), new Vector(npc.position));
             npcSprite.viewDistance = npc.viewDistance;
             npcSprite.FOV = npc.FOV;
 
