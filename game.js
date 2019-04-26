@@ -366,6 +366,8 @@ let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 9
 let tutorial = new PIXI.Text('Use WASD to move and press Space when near an enemy to take them out.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
 let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
 
+let winText = new PIXI.Text('Congragulations! \n You Win',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
+
 function animate() {
 
     evaluateControls();
