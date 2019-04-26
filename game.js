@@ -382,9 +382,7 @@ function moveAlongPath(npc) {
         }
     }
 
-    if (npc.currentVec.toAngles() - npc.rotation > rotationSpeed ) {
-        npc.rotation += rotationSpeed;
-    }
+    npc.rotation = npc.currentVec.toAngles();
 
     var movementVec;
     if (npc.currentVec.length() < movementSpeed) {

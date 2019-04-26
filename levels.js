@@ -96,7 +96,7 @@ levels.push( new Level(
     ],
 
     [
-        createNPC(-100, -100, 0, 10, Math.PI/4, [new Vector(500, 0), new Vector(0, 500)]),
+        
     ],
 
     [
