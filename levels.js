@@ -104,6 +104,7 @@ levels.push( new Level(
     ])
 );
 
+
 levels.push( new Level(
     [
         levelTwoMainPart.getInstance(9.8*wu, 1.7*wu),
@@ -137,20 +138,21 @@ levels.push( new Level(
     [
         createNPC(-2*wu, -2*wu, Math.PI, 2*wu, Math.PI/2),
         createNPC(-1*wu, -13*wu, 0, 2*wu, Math.PI/8),
-        createNPC(4*wu, -2*wu, Math.PI, 2*wu, Math.PI/4),
+        createNPC(4*wu, -2*wu, Math.PI, 2*wu, Math.PI/4, [new Vector(-8*wu, 0)]),
         createNPC(1.2*wu, -13*wu, Math.PI, 2*wu, Math.PI/8),
         createNPC(-7.75*wu, -14.5*wu, Math.PI/2, 2.4*wu, Math.PI/4),
-        createNPC(-16*wu, -23*wu, Math.PI/2, 2.4*wu, Math.PI/4),
+        createNPC(-16*wu, -23*wu, Math.PI/2, 2.4*wu, Math.PI/4, [new Vector(0, 4*wu), new Vector(3.15*wu, 0), new Vector(0, 4*wu)]),
         createNPC(-2*wu, -2*wu, Math.PI, 2*wu, Math.PI/2),
 
         createNPC(-21*wu, -13*wu, 0, 2*wu, Math.PI/2),
-        createNPC(-12*wu, -1*wu, Math.PI, 2*wu, Math.PI/2),
-        createNPC(11*wu, -7*wu, Math.PI, 2*wu, Math.PI/2),
+        createNPC(-12*wu, -1*wu, Math.PI, 2*wu, Math.PI/2, [new Vector(-6.8*wu, 0)]),
+        createNPC(11*wu, -7*wu, Math.PI, 2*wu, Math.PI/2, [new Vector(-2*wu, 0), new Vector(0, 4*wu)]),
         createNPC(17*wu, -14*wu, Math.PI, 2*wu, Math.PI/2),
-        createNPC(24*wu, -14*wu, Math.PI, 2*wu, Math.PI/2)
+        createNPC(24*wu, -14*wu, Math.PI, 2*wu, Math.PI/2, [new Vector(-4*wu, 0)])
     ],
     [
         star.getInstance(0, -22*wu)
     ])
 );
+
 
