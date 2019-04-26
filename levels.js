@@ -4,7 +4,7 @@ var box = new Structure([[100, 0], [100, 100], [200, 100], [200, 0]]);
 var diamond = new Structure([[0, 0], [50, 50], [100, 0], [50, -50]]);
 var star = new Structure([[9, 40], [32, 60], [24, 91], [52, 74], [78, 91], [71, 60], [94, 41], [64, 38], [52, 9], [40, 38]]);
 
-var wu = 100;
+var wu = 25;
 var levelMainPart = new Structure([[0,0], [3*wu, 0], [3*wu, 12*wu], [13*wu, 12*wu], [13*wu, 9*wu], [11*wu, 9*wu], [11*wu, 5*wu], [15*wu, 5*wu], [15*wu, 11*wu], [22*wu, 11*wu], [22*wu, 14*wu], [25*wu, 14*wu], [25*wu, 11*wu], [29*wu, 11*wu], [29*wu, 8*wu], [25*wu, 8*wu], [25*wu, 6*wu], [31*wu, 6*wu], [31*wu, 10*wu], [40*wu, 10*wu], [40*wu, 8*wu], [45*wu, 8*wu], [45*wu, -1*wu], [49*wu, -1*wu], [49*wu, -10*wu],[38*wu, -10*wu], [38*wu, -1*wu], [42*wu, -1*wu], [42*wu, 5*wu], [40*wu, 5*wu], [40*wu, 3*wu], [35*wu, 3*wu], [35*wu, -3*wu], [25*wu, -3*wu], [25*wu, -13*wu], [22*wu, -13*wu], [22*wu, -3*wu], [17*wu, -3*wu], [17*wu, -9*wu], [9*wu, -9*wu], [9*wu, -15*wu], [6*wu, -15*wu], [6*wu, -6*wu], [9*wu, -6*wu], [9*wu, -3*wu], [0, -3*wu], [0,0], 
 [wu, -wu], [wu, -2*wu], [10*wu, -2*wu], [10*wu, -7*wu], [7*wu, -7*wu], [7*wu, -14*wu], [8*wu, -14*wu], [8*wu, -8*wu], [16*wu, -8*wu], [16*wu, -2*wu], [23*wu, -2*wu], [23*wu, -12*wu], [24*wu, -12*wu], [24*wu, -2*wu], [34*wu, -2*wu], [34*wu, 4*wu], [39*wu, 4*wu], [39*wu, 6*wu], [43*wu, 6*wu], [43*wu, -2*wu], [39*wu, -2*wu], [39*wu, -9*wu], [48*wu, -9*wu], [48*wu, -2*wu], [44*wu, -2*wu], [44*wu, 7*wu], [39*wu, 7*wu], [39*wu, 9*wu], [32*wu, 9*wu], [32*wu, 5*wu], [24*wu, 5*wu], [24*wu, 9*wu], [28*wu, 9*wu], [28*wu, 10*wu], [24*wu, 10*wu], [24*wu, 13*wu], [23*wu, 13*wu], [23*wu, 10*wu], [16*wu, 10*wu], [16*wu, 4*wu], [10*wu, 4*wu], [10*wu, 10*wu], [12*wu, 10*wu], [12*wu, 11*wu], [4*wu, 11*wu], [4*wu, -1*wu], [wu, -1*wu] ]);
 
@@ -66,9 +66,11 @@ Level.prototype = {
             npcSprite.anchor.y = 0.5;
 
             // move the sprite to the center of the screen
-            npcSprite.offset = new Vector(npc.position);
+            npcSprite.offset = new Vector(npc.position).negative();
 
-            npcSprite.position = Vector.add(new Vector(player.position), npcSprite.offset);
+            var position = Vector.add(new Vector(player.position), new Vector(npc.position));
+            npcSprite.position.x = position.x;
+            npcSprite.position.y = position.y;
             npcSprite.rotation = npc.rotation;
 
             npcSprite.viewDistance = npc.viewDistance;
@@ -82,7 +84,7 @@ Level.prototype = {
 
 levels.push( new Level(
     [
-        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu), 
+        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu),
         levelTwoSmallLoop.getInstance(9*wu, 3.3*wu), 
         levelTwoBigLoop.getInstance(18*wu, 6.2*wu)
     ],
@@ -90,7 +92,8 @@ levels.push( new Level(
     [
         createNPC(20*wu, -1*wu, Math.PI, 5*wu, Math.PI/2),
         createNPC(27*wu, 5*wu, Math.PI, 5*wu, Math.PI/2),
-        createNPC(31.5*wu, 13*wu, Math.PI, 4*wu, Math.PI/2)
+        createNPC(31.5*wu, 13*wu, Math.PI, 4*wu, Math.PI/2),
+        createNPC(150, 0, 0, 500, Math.PI/4)
     ],
 
     [

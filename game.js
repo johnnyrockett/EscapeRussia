@@ -187,6 +187,8 @@ function updateView(object)
         for (var structure of levels[currentLevel].structures) {
             // console.log(Vector.cross(left, structure.coords[0]), Vector.cross(right, structure.coords[0]));
             for (var p=0; p < structure.coords.length; p++) {
+                // if (object.offset.x != 0)
+                //     console.log(object.offset);
                 var vec = Vector.add(structure.coords[p], object.offset);
                 if (vec.length() < object.viewDistance && left.cross(vec) > 0 && right.cross(vec) < 0) {
                     var nDirection1 = vec.dot(structure.pointNormals[p][0]) >= 0;
@@ -279,6 +281,16 @@ function evaluateControls() {
         offsetX += movementSpeed;
     if (keys["w"])
         offsetY += movementSpeed;
+    if (keys[" "] && levels[currentLevel] != undefined) {
+        for (var npc of levels[currentLevel].npcElements) {
+            var distance = Vector.subtract(new Vector(player.position), new Vector(npc.position)).length();
+            if (distance < 30) {
+                npc.triangle.clear();
+                stage.removeChild(npc);
+                levels[currentLevel].npcElements.splice(levels[currentLevel].npcElements.indexOf(npc), 1);
+            }
+        }
+    }
     // if (keys["c"]){
     //     for (var npc of levels[currentLevel].npcElements) {
     //         updateView(npc);
