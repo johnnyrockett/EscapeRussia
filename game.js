@@ -78,7 +78,7 @@ function loadLevel(index) {
             stage.removeChild(element);
         }
         for (var element of levels[currentLevel].npcElements) {
-            stage.removeChild(npc.triangle);
+            stage.removeChild(element.triangle);
             stage.removeChild(element);
         }
     }
