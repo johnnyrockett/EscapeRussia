@@ -396,6 +396,7 @@ function moveAlongPath(npc) {
 
     npc.position.x += movementVec.x;
     npc.position.y += movementVec.y;
+    npc.offset.subtract(movementVec);
 }
 
 function animate() {
