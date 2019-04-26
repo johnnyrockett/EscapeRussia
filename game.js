@@ -112,10 +112,10 @@ stage.on("mousedown", function(e){
 keys = {};
 
 function downListener(event) {
-    keys[event.key] = true;
+    keys[event.key.toLowerCase()] = true;
 }
 function upListener(event) {
-    keys[event.key] = false;
+    keys[event.key.toLowerCase()] = false;
 }
 
 window.addEventListener(
