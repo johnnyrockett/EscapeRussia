@@ -345,10 +345,10 @@ function evaluateControls() {
     }
 }
 
-let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
-let tutorial = new PIXI.Text('Use WASD to move and press Space when near an enemy to take them out.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
-let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
-let winText = new PIXI.Text('Congragulations! \n You Win',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
+let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'left'});
+let tutorial = new PIXI.Text('\n\n\n\n\n\n\n\n\n\n\n\nUse WASD to move and press Space when near an enemy to take them out.\n Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'left'});
+//let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
+let winText = new PIXI.Text('\n\n\n                          Congragulations! \n                           You Win',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
 
 function moveAlongPath(npc) {
     if (npc.path == undefined)
@@ -423,20 +423,20 @@ function animate() {
     }
 
     if( currentLevel == 0) {
-        text.anchor.set(-.2,-.8);
-        tutorial.anchor.set(-.08,-13);
-        tutorial2.anchor.set(-.1,-15);
+       // text.anchor.set(-.2,-.8);
+        //tutorial.anchor.set(.5,.5);
+       // tutorial2.anchor.set(-.1,-15);
         stage.addChild(text);
         stage.addChild(tutorial);
-        stage.addChild(tutorial2);
+       // stage.addChild(tutorial2);
     } else  {
         stage.removeChild(text);
         stage.removeChild(tutorial);
-        stage.removeChild(tutorial2);
+       // stage.removeChild(tutorial2);
     }
 
     if( currentLevel == 3) {
-        winText.anchor.set(-.8, -.7);
+       // winText.anchor.set(-.8, -.7);
         stage.addChild(winText);
     } else {
         stage.removeChild(winText);
