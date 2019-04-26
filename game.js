@@ -78,7 +78,7 @@ function loadLevel(index) {
             stage.removeChild(element);
         }
         for (var element of levels[currentLevel].npcElements) {
-            element.triangle.clear();
+            stage.removeChild(npc.triangle);
             stage.removeChild(element);
         }
     }
@@ -285,7 +285,7 @@ function evaluateControls() {
         for (var npc of levels[currentLevel].npcElements) {
             var distance = Vector.subtract(new Vector(player.position), new Vector(npc.position)).length();
             if (distance < 30) {
-                npc.triangle.clear();
+                stage.removeChild(npc.triangle);
                 stage.removeChild(npc);
                 levels[currentLevel].npcElements.splice(levels[currentLevel].npcElements.indexOf(npc), 1);
             }
