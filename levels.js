@@ -83,6 +83,25 @@ Level.prototype = {
 };
 
 
+levels.push( new Level(
+    [
+        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu), 
+        levelTwoSmallLoop.getInstance(9*wu, 3.3*wu), 
+        levelTwoBigLoop.getInstance(18*wu, 6.2*wu)
+    ],
+
+    [
+        createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2),
+        createNPC(16*wu, 4.2*wu, Math.PI, 5*wu, Math.PI/2),
+        createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2),
+        createNPC(24.5*wu, 2*wu, Math.PI, 4*wu, Math.PI/2),
+        createNPC(12*wu, 0, Math.PI, 4*wu, Math.PI/2)
+    ],
+
+    [
+        star.getInstance(28*wu, 0)
+    ])
+);
 
 levels.push( new Level(
     [
@@ -114,22 +133,3 @@ levels.push( new Level(
     ])
 );
 
-levels.push( new Level(
-    [
-        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu), 
-        levelTwoSmallLoop.getInstance(9*wu, 3.3*wu), 
-        levelTwoBigLoop.getInstance(18*wu, 6.2*wu)
-    ],
-
-    [
-        createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2),
-        createNPC(16*wu, 4.2*wu, Math.PI, 5*wu, Math.PI/2),
-        createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2),
-        createNPC(24.5*wu, 2*wu, Math.PI, 4*wu, Math.PI/2),
-        createNPC(12*wu, 0, Math.PI, 4*wu, Math.PI/2)
-    ],
-
-    [
-        star.getInstance(28*wu, 0)
-    ])
-);
