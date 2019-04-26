@@ -362,6 +362,10 @@ function evaluateControls() {
     }
 }
 
+let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
+let tutorial = new PIXI.Text('Use WASD to move and press Space when near an enemy to take them out.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
+let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
+
 function animate() {
 
     evaluateControls();
@@ -398,6 +402,19 @@ function animate() {
         }
     }
 
+    if( currentLevel == 0) {
+        text.anchor.set(-.2,-.8);
+        tutorial.anchor.set(-.08,-13);
+        tutorial2.anchor.set(-.1,-15);
+        stage.addChild(text);
+        stage.addChild(tutorial);
+        stage.addChild(tutorial2);
+    } else  {
+        stage.removeChild(text);
+        stage.removeChild(tutorial);
+        stage.removeChild(tutorial2);
+    }
+    
 
     // render the container
     renderer.render(stage);
