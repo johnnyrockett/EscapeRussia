@@ -4,7 +4,7 @@ var box = new Structure([[100, 0], [100, 100], [200, 100], [200, 0]]);
 var diamond = new Structure([[0, 0], [50, 50], [100, 0], [50, -50]]);
 var star = new Structure([[9, 40], [32, 60], [24, 91], [52, 74], [78, 91], [71, 60], [94, 41], [64, 38], [52, 9], [40, 38]]);
 
-var wu = 20;
+var wu = 50
 var levelMainPart = new Structure([[0,0], [3*wu, 0], [3*wu, 12*wu], [13*wu, 12*wu], [13*wu, 9*wu], [11*wu, 9*wu], [11*wu, 5*wu], [15*wu, 5*wu], [15*wu, 11*wu], [22*wu, 11*wu], [22*wu, 14*wu], [25*wu, 14*wu], [25*wu, 11*wu], [29*wu, 11*wu], [29*wu, 8*wu], [25*wu, 8*wu], [25*wu, 6*wu], [31*wu, 6*wu], [31*wu, 10*wu], [40*wu, 10*wu], [40*wu, 8*wu], [45*wu, 8*wu], [45*wu, -1*wu], [49*wu, -1*wu], [49*wu, -10*wu],[38*wu, -10*wu], [38*wu, -1*wu], [42*wu, -1*wu], [42*wu, 5*wu], [40*wu, 5*wu], [40*wu, 3*wu], [35*wu, 3*wu], [35*wu, -3*wu], [25*wu, -3*wu], [25*wu, -13*wu], [22*wu, -13*wu], [22*wu, -3*wu], [17*wu, -3*wu], [17*wu, -9*wu], [9*wu, -9*wu], [9*wu, -15*wu], [6*wu, -15*wu], [6*wu, -6*wu], [9*wu, -6*wu], [9*wu, -3*wu], [0, -3*wu], [0,0], 
 [wu, -wu], [wu, -2*wu], [10*wu, -2*wu], [10*wu, -7*wu], [7*wu, -7*wu], [7*wu, -14*wu], [8*wu, -14*wu], [8*wu, -8*wu], [16*wu, -8*wu], [16*wu, -2*wu], [23*wu, -2*wu], [23*wu, -12*wu], [24*wu, -12*wu], [24*wu, -2*wu], [34*wu, -2*wu], [34*wu, 4*wu], [39*wu, 4*wu], [39*wu, 6*wu], [43*wu, 6*wu], [43*wu, -2*wu], [39*wu, -2*wu], [39*wu, -9*wu], [48*wu, -9*wu], [48*wu, -2*wu], [44*wu, -2*wu], [44*wu, 7*wu], [39*wu, 7*wu], [39*wu, 9*wu], [32*wu, 9*wu], [32*wu, 5*wu], [24*wu, 5*wu], [24*wu, 9*wu], [28*wu, 9*wu], [28*wu, 10*wu], [24*wu, 10*wu], [24*wu, 13*wu], [23*wu, 13*wu], [23*wu, 10*wu], [16*wu, 10*wu], [16*wu, 4*wu], [10*wu, 4*wu], [10*wu, 10*wu], [12*wu, 10*wu], [12*wu, 11*wu], [4*wu, 11*wu], [4*wu, -1*wu], [wu, -1*wu] ]);
 
