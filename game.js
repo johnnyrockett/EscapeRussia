@@ -249,7 +249,8 @@ function isPlayerWithin(path) {
     return inside;
 }
 
-var movementSpeed = 4;
+var movementSpeed = 3;
+var rotationSpeed = Math.PI/25;
 
 function evaluateControls() {
     var offsetX = 0;
@@ -346,17 +347,51 @@ function evaluateControls() {
 let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
 let tutorial = new PIXI.Text('Use WASD to move and press Space when near an enemy to take them out.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
 let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
-
 let winText = new PIXI.Text('Congragulations! \n You Win',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
+
+function moveAlongPath(npc) {
+    if (npc.path == undefined)
+        return;
+
+    if (!npc.currentVec) {
+        if (npc.path[npc.pathIndex] != undefined) {
+            npc.currentVec = npc.path[npc.pathIndex].clone();
+        } else if (npc.pathIndex < npc.path.length*2) {
+            npc.currentVec = Vector.negative(npc.path[npc.path.length - (npc.pathIndex - npc.path.length) - 1])
+        } else {
+            npc.pathIndex = 0;
+            npc.currentVec = npc.path[npc.pathIndex].clone();
+        }
+    }
+
+    npc.rotation = npc.currentVec.toAngles();
+
+    var movementVec;
+    if (npc.currentVec.length() < movementSpeed) {
+        movementVec = npc.currentVec;
+        npc.currentVec = null;
+        npc.pathIndex++;
+    } else {
+        movementVec = npc.currentVec.clone().normalize().multiply(movementSpeed);
+        npc.currentVec.subtract(movementVec);
+    }
+
+    npc.position.x += movementVec.x;
+    npc.position.y += movementVec.y;
+}
 
 function animate() {
 
     evaluateControls();
 
+
+
     player.rotation = rotateToPoint(renderer.plugins.interaction.mouse.global.x, renderer.plugins.interaction.mouse.global.y, player.position.x, player.position.y);
     updateView(player);
     if (levels[currentLevel] != undefined) {
         for (var npc of levels[currentLevel].npcElements) {
+            moveAlongPath(npc);
+
             updateView(npc);
             var adjustedPath = [];
             var npcPosition = new Vector(npc.position);

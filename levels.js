@@ -28,7 +28,7 @@ var v = 20;
 
 var introLoop = new Structure([[0,0], [h*wu, 0], [h*wu, -v*wu], [0, -v*wu], [0, 0,], [wu, -wu], [wu, (-v+1)*wu], [(h-1)*wu, (-v+1)*wu], [(h-1)*wu, -wu], [wu, -wu]]);
 
-function createNPC(x, y, rotation, viewDistance, FOV) {
+function createNPC(x, y, rotation, viewDistance, FOV, path) {
 
     // move the sprite to the center of the screen
     var position = {x: x, y: y};
@@ -37,7 +37,8 @@ function createNPC(x, y, rotation, viewDistance, FOV) {
         position: position,
         rotation: rotation,
         viewDistance: viewDistance,
-        FOV: FOV
+        FOV: FOV,
+        path: path
     };
 }
       
@@ -80,6 +81,8 @@ Level.prototype = {
 
             npcSprite.viewDistance = npc.viewDistance;
             npcSprite.FOV = npc.FOV;
+            npcSprite.path = npc.path;
+            npcSprite.pathIndex = 0;
 
             this.npcElements.push(npcSprite);
         }
@@ -103,13 +106,13 @@ levels.push( new Level(
 
 levels.push( new Level(
     [
-        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu), 
+        levelTwoMainPart.getInstance(9.8*wu, 1.7*wu),
         levelTwoSmallLoop.getInstance(9*wu, 3.3*wu), 
         levelTwoBigLoop.getInstance(18*wu, 6.2*wu)
     ],
 
     [
-        createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2),
+        createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2, [new Vector(-2*wu, 0)]),
         createNPC(16*wu, 4.2*wu, Math.PI, 5*wu, Math.PI/2),
         createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2),
         createNPC(24.8*wu, 2*wu, 3*Math.PI/2, 4*wu, Math.PI/2),
