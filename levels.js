@@ -96,11 +96,11 @@ levels.push( new Level(
     ],
 
     [
-        
+        createNPC(3*wu, -wu, 3*Math.PI/2, 2.5*wu, Math.PI/2)
     ],
 
     [
-        star.getInstance(0, -2*wu)
+        star.getInstance(3*wu, -2*wu)
     ])
 );
 
@@ -112,7 +112,7 @@ levels.push( new Level(
     ],
 
     [
-        createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2),
+        createNPC(12*wu, -6*wu, Math.PI, 5*wu, Math.PI/2, [new Vector(-2*wu, 0)]),
         createNPC(16*wu, 4.2*wu, Math.PI, 5*wu, Math.PI/2),
         createNPC(23*wu, 8.2*wu, Math.PI, 4*wu, Math.PI/2),
         createNPC(24.8*wu, 2*wu, 3*Math.PI/2, 4*wu, Math.PI/2),
@@ -136,9 +136,9 @@ levels.push( new Level(
     ],
     [
         createNPC(-2*wu, -2*wu, Math.PI, 2*wu, Math.PI/2),
-        createNPC(-1*wu, -13*wu, 0, 2.4*wu, Math.PI/8),
+        createNPC(-1*wu, -13*wu, 0, 2*wu, Math.PI/8),
         createNPC(4*wu, -2*wu, Math.PI, 2*wu, Math.PI/4),
-        createNPC(1.2*wu, -13*wu, Math.PI, 2.4*wu, Math.PI/8),
+        createNPC(1.2*wu, -13*wu, Math.PI, 2*wu, Math.PI/8),
         createNPC(-7.75*wu, -14.5*wu, Math.PI/2, 2.4*wu, Math.PI/4),
         createNPC(-16*wu, -23*wu, Math.PI/2, 2.4*wu, Math.PI/4),
         createNPC(-2*wu, -2*wu, Math.PI, 2*wu, Math.PI/2),

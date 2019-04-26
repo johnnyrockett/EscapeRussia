@@ -47,25 +47,6 @@ function setup() {
     stage.addChild(tilingSprite);
     stage.addChild(player);
 
-    // var nook = new Structure(
-    //     [new Vector(0, 0), new Vector(-10, 50), new Vector(50, 0), new Vector(110, 50), new Vector(100, 0), new Vector(50, -50)],
-    //     [[0,1], [1,2], [3,4], [4,5], [5, 0]]
-    // );
-
-
-    // structures.push(nook.getInstance(-100, 150));
-
-
-    // //Make a horrizontal coridoor
-    // structures.push(new Structure( [new Vector(200, 50), new Vector(50, 50), new Vector(200, 90), new Vector(50, 90)],
-    //                                 [[0,1], [2,3] ],
-    //                                 [[0, -1], [0,1]]));
-
-    // //Make a vertical corridoor
-    // structures.push(new Structure( [new Vector(100, 100), new Vector(75, 100), new Vector(100, 400), new Vector(75, 400)],
-    //                                 [[0,2], [1,3] ],
-    //                                 [[-1, 0], [1,0]]));
-
     stage.interactive = true;
     animate();
     loadLevel(0);
@@ -366,6 +347,7 @@ function evaluateControls() {
 let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
 let tutorial = new PIXI.Text('Use WASD to move and press Space when near an enemy to take them out.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
 let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
+let winText = new PIXI.Text('Congragulations! \n You Win',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
 
 function moveAlongPath(npc) {
     if (npc.path == undefined)
@@ -450,6 +432,13 @@ function animate() {
         stage.removeChild(text);
         stage.removeChild(tutorial);
         stage.removeChild(tutorial2);
+    }
+
+    if( currentLevel == 3) {
+        winText.anchor.set(-.8, -.7);
+        stage.addChild(winText);
+    } else {
+        stage.removeChild(winText);
     }
     
 
