@@ -346,7 +346,7 @@ function evaluateControls() {
 }
 
 let text = new PIXI.Text('Escape from Russia',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'left'});
-let tutorial = new PIXI.Text('\n\n\n\n\n\n\n\n\n\n\n\nUse WASD to move and press Space when near an enemy to take them out.\n Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'left'});
+let tutorial = new PIXI.Text('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nUse WASD to move and press Space when near an enemy to take them out.\n Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 35, fill : 0xffffff, align : 'left'});
 //let tutorial2 = new PIXI.Text('Get to the Star to advance, and avoid enemy lines of sight.',{fontFamily : 'Arial', fontSize: 50, fill : 0xffffff, align : 'center'});
 let winText = new PIXI.Text('\n\n\n                          Congragulations! \n                           You Win',{fontFamily : 'Arial', fontSize: 90, fill : 0xffffff, align : 'center'});
 
